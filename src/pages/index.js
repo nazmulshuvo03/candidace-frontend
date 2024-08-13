@@ -1,11 +1,20 @@
-import { Inter } from "next/font/google";
+// pages/index.js (Landing Page)
+export async function getStaticProps() {
+  // Fetch any data needed for the landing page here
 
-const inter = Inter({ subsets: ["latin"] });
+  return {
+    props: {
+      // Pass the data as props to the component
+    },
+  };
+}
 
-export default function Home() {
+const LandingPage = (props) => {
   return (
     <div>
       <h1>Hello</h1>
     </div>
   );
-}
+};
+
+export default LandingPage;
