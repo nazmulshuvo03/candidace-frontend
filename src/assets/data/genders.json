@@ -1,0 +1,5 @@
+[
+  { "id": "male", "name": "Male" },
+  { "id": "female", "name": "Female" },
+  { "id": "not-disclose", "name": "Do not want to disclose" }
+]

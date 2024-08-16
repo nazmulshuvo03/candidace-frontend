@@ -1,0 +1,31 @@
+@keyframes slideDown {
+  0% {
+    max-height: 0;
+    opacity: 0;
+  }
+  100% {
+    max-height: 100%;
+    opacity: 1;
+  }
+}
+
+.animateSlideDown {
+  animation: slideDown 0.5s ease-out forwards;
+  display: block;
+}
+
+@keyframes slideUp {
+  0% {
+    max-height: 100%;
+    opacity: 1;
+  }
+  100% {
+    max-height: 0;
+    opacity: 0;
+  }
+}
+
+.animateSlideUp {
+  animation: slideUp 0.5s ease-in forwards;
+  display: none;
+}

@@ -1,0 +1,26 @@
+/* Define custom CSS animations for sliding in and out */
+@keyframes toastMessageSlideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes toastMessageSlideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-110%); /* 110% because of left postion 10% */
+  }
+}
+
+.toast-message-slide-in {
+  animation: toastMessageSlideIn 0.5s forwards;
+}
+
+.toast-message-slide-out {
+  animation: toastMessageSlideOut 0.5s forwards;
+}

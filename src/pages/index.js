@@ -1,3 +1,5 @@
+import { LandingPage } from "@/components/LandingPage";
+
 // pages/index.js (Landing Page)
 export async function getStaticProps() {
   // Fetch any data needed for the landing page here
@@ -9,12 +11,8 @@ export async function getStaticProps() {
   };
 }
 
-const LandingPage = (props) => {
-  return (
-    <div>
-      <h1>Hello</h1>
-    </div>
-  );
+const Landing = (props) => {
+  return <LandingPage />;
 };
 
-export default LandingPage;
+export default Landing;
