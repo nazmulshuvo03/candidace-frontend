@@ -2,27 +2,27 @@ import { useSelector } from "react-redux";
 import { getDataLabelFromKey } from "../../utils/data";
 import useDeviceSize from "../../hooks/useDeviceSize";
 import { IconButton } from "../Button/IconButton";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { Block } from "../Layouts/Block";
 import { NoData } from "../NoData";
 import moment from "moment";
 import { Tooltip } from "../Tooltip";
+import { useRouter } from "next/router";
 
 export const Past = ({ data }) => {
-  const history = useHistory();
+  const router = useRouter();
   const deviceSize = useDeviceSize();
   const profile = useSelector((state) => state.user.profile);
   const companies = useSelector((state) => state.static.companies);
   const allSkill = useSelector((state) => state.profession.allSkill);
 
   const handleNotesClick = (id) => {
-    history.push({
+    router.push({
       search: `?open=note&meeting=${id}`,
     });
   };
 
   const handleFeedbackClick = (id) => {
-    history.push({
+    router.push({
       search: `?open=review&meeting=${id}`,
     });
   };

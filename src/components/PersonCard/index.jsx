@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { ImageArea } from "./ImageArea";
 import { WorkInfo } from "./WorkInfo";
 import { ActionArea } from "./ActionArea";
@@ -9,10 +8,11 @@ import { useState } from "react";
 import { Modal } from "../Modal";
 import { createMeeting } from "../../store/middlewares/meeting";
 import { MIXPANEL_TRACK } from "../../utils/mixpanel";
+import { useRouter } from "next/router";
 
 export const PersonCard = ({ data }) => {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const router = useRouter();
 
   const user = useSelector((state) => state.user.profile);
   const preparationStages = useSelector(
@@ -37,7 +37,7 @@ export const PersonCard = ({ data }) => {
       data: { visitorId: user.id },
       id: data.id,
     });
-    history.push(`/user/${data.id}`);
+    router.push(`/user/${data.id}`);
   };
 
   return (

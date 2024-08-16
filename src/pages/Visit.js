@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  useHistory,
-  useParams,
-} from "react-router-dom/cjs/react-router-dom.min";
 import { visitUserProfile } from "../store/middlewares/user";
 import { clearVisitingProfile } from "../store/slices/user";
 import { UserProfile } from "../components/Profile";
+import { useRouter } from "next/router";
 
 const Visit = () => {
-  const { userId } = useParams();
-  const history = useHistory();
+  const router = useRouter();
+  const { userId } = router.query;
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.global.isAuthenticated);

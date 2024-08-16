@@ -1,12 +1,13 @@
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
 import { Input } from "../components/Input";
 import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { resetPassword } from "../store/middlewares/auth";
+import { useRouter } from "next/router";
 
 const ResetPassword = () => {
-  const { token } = useParams();
+  const router = useRouter();
+  const { token } = router.query;
   const dispatch = useDispatch();
   const [password, setPassword] = useState();
   const [confirm, setConfirm] = useState();

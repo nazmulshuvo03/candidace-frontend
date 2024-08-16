@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import { HorizontalTabs } from "../Tabs/HorizontalTabs";
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleMeeting } from "../../store/middlewares/meeting";
@@ -7,10 +6,11 @@ import { setMeetingDetails } from "../../store/slices/meeting";
 import { getDataLabelFromKey } from "../../utils/data";
 import { SelfReview } from "./SelfReview";
 import { fetchAllReviewQuestions } from "../../store/middlewares/review";
+import { useRouter } from "next/router";
 
 export const SelfAssessment = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
+  const router = useRouter();
 
   const meetingDetails = useSelector((state) => state.meeting.details);
   const allSkill = useSelector((state) => state.profession.allSkill);
@@ -40,14 +40,14 @@ export const SelfAssessment = () => {
   };
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
+    const searchParams = new URLSearchParams(router.search);
     const id = searchParams.get("meeting");
-    if (location.search && id) {
+    if (router.search && id) {
       setMeetingId(id);
     }
 
     return () => dispatch(setMeetingDetails(null));
-  }, [location.search]);
+  }, [router.search]);
 
   useEffect(() => {
     if (meetingId) {

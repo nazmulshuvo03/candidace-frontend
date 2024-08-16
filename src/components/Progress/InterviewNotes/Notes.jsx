@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { NoData } from "../../NoData";
 import moment from "moment";
+import Link from "next/link";
 
 export const Notes = ({ data = null }) => {
   const user = useSelector((state) => state.user.profile);
@@ -22,7 +22,7 @@ export const Notes = ({ data = null }) => {
               >
                 <div className="pt-1 pb-3">{item.note}</div>
                 <Link
-                  to={`/user/${interviewerProfile.id}`}
+                  href={`/user/${interviewerProfile.id}`}
                   className="flex gap-1 text-gray-500 text-xs italic"
                 >
                   <div>-</div>

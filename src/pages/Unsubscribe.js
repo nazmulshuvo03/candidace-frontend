@@ -1,18 +1,18 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
 import { Button } from "../components/Button";
 import { changeUserSubscription } from "../store/middlewares/user";
+import { useRouter } from "next/router";
 
 const Unsubscribe = () => {
-  const { userId } = useParams();
-  const history = useHistory();
+  const router = useRouter();
+  const { userId } = router.query;
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user.profile);
 
   useEffect(() => {
     if (!profile) {
-      history.push({
+      router.push({
         search: "?auth=login",
       });
     }
@@ -25,7 +25,7 @@ const Unsubscribe = () => {
         status: true,
       })
     );
-    history.push("/");
+    router.push("/");
   };
 
   if (profile) {
@@ -40,7 +40,7 @@ const Unsubscribe = () => {
                 </div>
                 <Button
                   onClick={() => {
-                    history.push("/profile");
+                    router.push("/profile");
                   }}
                 >
                   Go to Profile

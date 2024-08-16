@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleMeeting } from "../../store/middlewares/meeting";
 import { setMeetingDetails } from "../../store/slices/meeting";
 import { InterviewerReview } from "./InterviewerReview";
+import { useRouter } from "next/router";
 
 export const Review = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
+  const router = useRouter();
 
   const user = useSelector((state) => state.user.profile);
   const meetingDetails = useSelector((state) => state.meeting.details);
@@ -15,13 +15,13 @@ export const Review = () => {
   const [interviewer, setInterviewer] = useState();
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
+    const searchParams = new URLSearchParams(router.search);
     const id = searchParams.get("meeting");
-    if (location.search && id) {
+    if (router.search && id) {
       dispatch(getSingleMeeting(id));
     }
     return () => dispatch(setMeetingDetails(null));
-  }, [location.search]);
+  }, [router.search]);
 
   useEffect(() => {
     if (meetingDetails) {

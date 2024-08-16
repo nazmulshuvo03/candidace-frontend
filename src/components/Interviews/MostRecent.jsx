@@ -3,15 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { IconButton } from "../Button/IconButton";
 import { getDataLabelFromKey } from "../../utils/data";
 import { Button } from "../Button";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { Modal } from "../Modal";
 import { Block } from "../Layouts/Block";
 import { NoData } from "../NoData";
 import moment from "moment";
 import { cancelMeeting } from "../../store/middlewares/meeting";
+import { useRouter } from "next/router";
 
 export const MostRecent = ({ data }) => {
-  const history = useHistory();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const profile = useSelector((state) => state.user.profile);
@@ -109,7 +109,7 @@ export const MostRecent = ({ data }) => {
                   className={`!text-secondary !font-light`}
                   style={{ fontSize: 10 }}
                   onClick={() => {
-                    history.push(`/user/${meetingUser.id}`);
+                    router.push(`/user/${meetingUser.id}`);
                   }}
                 >
                   Learn More

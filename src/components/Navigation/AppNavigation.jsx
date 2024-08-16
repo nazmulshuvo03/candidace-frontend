@@ -1,19 +1,19 @@
 import { TabNavigation } from "./TabNavigation";
-import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Intro } from "../Intro";
+import { useRouter } from "next/router";
 
 export const AppNavigation = () => {
-  const location = useLocation();
+  const router = useRouter();
   const [openIntro, setOpenIntro] = useState("");
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
+    const searchParams = new URLSearchParams(router.search);
     const introParam = searchParams.get("intro");
     if (introParam && introParam === "signup") {
       setOpenIntro("signup");
     } else setOpenIntro("");
-  }, [location.search]);
+  }, [router.search]);
 
   return (
     <div>

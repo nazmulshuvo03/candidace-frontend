@@ -1,20 +1,20 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useHistory } from "react-router-dom";
 import { fetchUserProfile } from "../store/middlewares/user";
+import { useRouter } from "next/router";
 
 const Home = () => {
-  const { userId } = useParams();
   const dispatch = useDispatch();
-  const history = useHistory();
+  const router = useRouter();
+  const { userId } = router.query;
 
   useEffect(() => {
     if (userId) {
       dispatch(
         fetchUserProfile(
           userId,
-          () => history.push("/profile"),
-          () => history.push("/?auth=login")
+          () => router.push("/profile"),
+          () => router.push("/?auth=login")
         )
       );
     }

@@ -9,10 +9,10 @@ import { addEducation } from "../../store/middlewares/education";
 import { addWorkExperience } from "../../store/middlewares/workExperience";
 import { updateUserData } from "../../store/middlewares/user";
 import { formatPostgresDate } from "../../utils/timeDate";
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import { useRouter } from "next/router";
 
 export const Onboarding = () => {
-  const history = useHistory();
+  const router = useRouter();
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user.profile);
 
@@ -63,7 +63,7 @@ export const Onboarding = () => {
     await dispatch(addEducation(fullEducation));
     await dispatch(addWorkExperience(fullWorkExp));
     await dispatch(updateUserData(profile.id, targetState));
-    history.push("/profile");
+    router.push("/profile");
   };
 
   console.log("@@@@@@", educationData, workData, targetState);

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPeople } from "../../store/middlewares/user";
 import { setDashboardQuery } from "../../store/slices/global";
@@ -9,14 +8,13 @@ import { HorizontalTabs } from "../Tabs/HorizontalTabs";
 import { AllPeople } from "./AllPeople";
 import { FavouritePeople } from "./FavouritePeople";
 import useDeviceSize from "../../hooks/useDeviceSize";
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import { useRouter } from "next/router";
 
 const EXPERIENCE_MIN_VALUE = 0;
 const EXPERIENCE_MAX_VALUE = 20;
 
 export const PeoplePage = () => {
-  const history = useHistory();
-  const location = useLocation();
+  const router = useRouter();
   const dispatch = useDispatch();
   const deviceSize = useDeviceSize();
 
@@ -48,7 +46,7 @@ export const PeoplePage = () => {
   }, [oldQuery]);
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
+    const searchParams = new URLSearchParams(router.search);
     const introParam = searchParams.get("intro");
     if (!introParam) {
       if (queries) {
@@ -58,11 +56,11 @@ export const PeoplePage = () => {
         const queryString = queryObjectToString(queries);
         if (profile) {
           dispatch(fetchPeople(queryString));
-          history.push(`/people?${queryString}`);
+          router.push(`/people?${queryString}`);
         }
       }
     }
-  }, [location.search, queries, oldQuery, profile]);
+  }, [router.search, queries, oldQuery, profile]);
 
   useEffect(() => {
     if (searchValue && searchValue.length >= 3) {

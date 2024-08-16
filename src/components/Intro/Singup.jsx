@@ -8,7 +8,7 @@ import {
   faClose,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../Button";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useRouter } from "next/router";
 
 const Messages = [
   <div>
@@ -30,7 +30,7 @@ const Messages = [
 ];
 
 export const SignupIntro = () => {
-  const history = useHistory();
+  const router = useRouter();
 
   const [state, setState] = useState(0);
 
@@ -64,7 +64,7 @@ export const SignupIntro = () => {
               <FontAwesomeIcon icon={faArrowRightLong} />
             </IconButton>
           ) : (
-            <Button onClick={() => history.push("/profile")} size="small">
+            <Button onClick={() => router.push("/profile")} size="small">
               Go To Profile
             </Button>
           )}
@@ -72,7 +72,7 @@ export const SignupIntro = () => {
         <IconButton
           className="absolute top-2 right-4 !text-gray-600 !text-lg"
           onClick={() =>
-            history.push({
+            router.push({
               search: "",
             })
           }

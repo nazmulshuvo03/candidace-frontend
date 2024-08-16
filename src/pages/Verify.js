@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useHistory } from "react-router-dom";
 import { validateEmailVerification } from "../store/middlewares/auth";
 import CircularProgress from "../components/ProgressBar";
+import { useRouter } from "next/router";
 
 const Verify = () => {
-  const { token } = useParams();
-  const history = useHistory();
+  const router = useRouter();
+  const { token } = router.query;
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user.profile);
 
@@ -19,7 +19,7 @@ const Verify = () => {
         })
       );
     } else if (!profile) {
-      history.push({
+      router.push({
         search: "?auth=login",
       });
     }

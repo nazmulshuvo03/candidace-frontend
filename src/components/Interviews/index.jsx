@@ -4,15 +4,13 @@ import { getUserMeetings } from "../../store/middlewares/meeting";
 import { Past } from "./Past";
 import { Upcoming } from "./Upcoming";
 import { MostRecent } from "./MostRecent";
-import { useLocation } from "react-router-dom";
 import { Modal } from "../Modal";
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { Review } from "../Review";
 import { SelfAssessment } from "../SelfAssessment";
+import { useRouter } from "next/router";
 
 export const Meetings = () => {
-  const location = useLocation();
-  const history = useHistory();
+  const router = useRouter();
   const profile = useSelector((state) => state.user.profile);
   const meetings = useSelector((state) => state.meeting.userMeetings);
   const dispatch = useDispatch();
@@ -58,7 +56,7 @@ export const Meetings = () => {
   }, [meetings]);
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
+    const searchParams = new URLSearchParams(router.search);
     const open = searchParams.get("open");
     const modeParam = searchParams.get("meeting");
     if (open === "review") {
@@ -69,7 +67,7 @@ export const Meetings = () => {
       setOpenReview();
       setOpenNotes();
     }
-  }, [location.search]);
+  }, [router.search]);
 
   return (
     <div className="px-3 md:px-10 py-3 md:py-6 pb-2  h-full overflow-y-auto overflow-x-hidden">
@@ -81,7 +79,7 @@ export const Meetings = () => {
       {openReview && (
         <Modal
           handleClose={() => {
-            history.push({
+            router.push({
               search: "",
             });
           }}
@@ -93,7 +91,7 @@ export const Meetings = () => {
       {openNotes && (
         <Modal
           handleClose={() => {
-            history.push({
+            router.push({
               search: "",
             });
           }}
