@@ -9,7 +9,10 @@ const withAuth = (WrappedComponent) => {
 
     useEffect(() => {
       if (!global.isAuthenticated) {
-        router.push("/?auth=login");
+        router.push({
+          pathname: "/",
+          query: { auth: "login" },
+        });
       }
     }, [global.isAuthenticated]);
 

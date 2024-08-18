@@ -7,9 +7,11 @@ import { signupUser } from "../../store/middlewares/auth";
 import { Dropdown } from "../Dropdown";
 import { isEmail } from "validator";
 import { GoogleAuth } from "./GoogleAuth";
+import { useRouter } from "next/router";
 
 export const Signup = ({ switchMode = () => {} }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const professions = useSelector((state) => state.profession.items);
   const [state, setState] = useState({
     email: "",
@@ -30,7 +32,18 @@ export const Signup = ({ switchMode = () => {} }) => {
     else if (!state.targetProfessionId)
       setErrorMessage("Please choose a career path");
     else if (!agree) setErrorMessage("Please read our Terms and Conditions");
-    else dispatch(signupUser(state));
+    else {
+      dispatch(signupUser(state));
+      const updatedQuery = { ...router.query };
+      if (updatedQuery.auth) {
+        delete updatedQuery.auth;
+      }
+      router.push({
+        pathname:
+          router.pathname === "/" ? "/dashboard/people" : router.pathname,
+        query: updatedQuery,
+      });
+    }
   };
 
   useEffect(() => {

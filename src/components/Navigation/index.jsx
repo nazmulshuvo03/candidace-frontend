@@ -95,7 +95,7 @@ export const Navigation = () => {
   const handleLoginClick = () => {
     router.push({
       pathname: router.pathname,
-      query: { auth: "login" },
+      query: { ...router.query, auth: "login" },
     });
   };
 
@@ -155,7 +155,7 @@ export const Navigation = () => {
           </div>
         )}
         <div className="text-3xl font-semibold opacity-75 h-full">
-          <Link href={"/profile"} className="text-gray-900 h-full">
+          <Link href={"/dashboard/profile"} className="text-gray-900 h-full">
             <img
               src={"/images/logo_full.svg"}
               alt="Candidace Logo"

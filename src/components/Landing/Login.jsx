@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import { loginUser } from "../../store/middlewares/auth";
 import { isEmail } from "validator";
 import { GoogleAuth } from "./GoogleAuth";
+import { useRouter } from "next/router";
 
 export const Login = ({ switchMode = () => {} }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -20,7 +22,18 @@ export const Login = ({ switchMode = () => {} }) => {
     if (!state.email) setErrorMessage("Email can not be empty");
     else if (!isEmail(state.email)) setErrorMessage("Invalid Email");
     else if (!state.password) setErrorMessage("Password can not be empty");
-    else dispatch(loginUser(state));
+    else {
+      dispatch(loginUser(state));
+      const updatedQuery = { ...router.query };
+      if (updatedQuery.auth) {
+        delete updatedQuery.auth;
+      }
+      router.push({
+        pathname:
+          router.pathname === "/" ? "/dashboard/people" : router.pathname,
+        query: updatedQuery,
+      });
+    }
   };
 
   useEffect(() => {

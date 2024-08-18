@@ -11,7 +11,8 @@ export const Auth = ({ authMode = "" }) => {
 
   const changeAuthMode = (changeTo = "") => {
     router.push({
-      search: `?auth=${changeTo}`,
+      pathname: router.pathname,
+      query: { ...router.query, auth: changeTo },
     });
   };
 
@@ -19,11 +20,14 @@ export const Auth = ({ authMode = "" }) => {
     if (isAuthenticated) {
       if (router.pathname && router.pathname === "/") {
         router.push(
-          `/people/${authMode === "signup" ? "?intro=" + authMode : ""}`
+          `/dashboard/people/${
+            authMode === "signup" ? "?intro=" + authMode : ""
+          }`
         );
       } else {
         router.push({
-          search: "",
+          pathname: router.pathname,
+          query: "",
         });
       }
     }
@@ -36,11 +40,16 @@ export const Auth = ({ authMode = "" }) => {
     >
       <div
         className="fixed top-0 left-0 w-full h-full"
-        onClick={() =>
+        onClick={() => {
+          const updatedQuery = { ...router.query };
+          if (updatedQuery.auth) {
+            delete updatedQuery.auth;
+          }
           router.push({
-            search: "",
-          })
-        }
+            pathname: router.pathname,
+            query: updatedQuery,
+          });
+        }}
       />
       <div className="absolute right-0 w-3/4 lg:w-1/2 xl:w-1/3 h-full bg-white z-50 shadow-lg transform translate-x-0 transition-transform duration-300 ease-in-out">
         <div className="h-full">

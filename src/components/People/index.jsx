@@ -56,7 +56,6 @@ export const PeoplePage = () => {
         const queryString = queryObjectToString(queries);
         if (profile) {
           dispatch(fetchPeople(queryString));
-          console.log("!!!!!!!!!!!!!!!!!!", queryString);
           if (queryString) router.push(`/dashboard/people?${queryString}`);
         }
       }

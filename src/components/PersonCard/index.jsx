@@ -37,7 +37,7 @@ export const PersonCard = ({ data }) => {
       data: { visitorId: user.id },
       id: data.id,
     });
-    router.push(`/user/${data.id}`);
+    router.push(`/public-profile/${data.id}`);
   };
 
   return (

@@ -27,8 +27,19 @@ export default function App({ Component, pageProps }) {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
-          <Navigation {...{ scrollToHowItWorks, scrollToFaqs }} />
-          <Component {...pageProps} />;
+          <div
+            className={`h-screen w-screen overflow-hidden bg-background text-text flex flex-col overflow-y-auto`}
+          >
+            <div className="w-full">
+              <Navigation {...{ scrollToHowItWorks, scrollToFaqs }} />
+            </div>
+            <div
+              className="flex-1 flex overflow-x-hidden overflow-y-auto"
+              style={{ height: "-webkit-fill-available" }}
+            >
+              <Component {...pageProps} />
+            </div>
+          </div>
         </GoogleOAuthProvider>
       </PersistGate>
     </Provider>

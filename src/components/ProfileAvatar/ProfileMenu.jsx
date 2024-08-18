@@ -3,6 +3,7 @@ import { logoutUser } from "../../store/middlewares/auth";
 // import { ThemeProvider } from "../ThemeProvider";
 import { googleLogout } from "@react-oauth/google";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const MenuLink = ({ children, ...props }) => (
   <div
@@ -15,11 +16,16 @@ const MenuLink = ({ children, ...props }) => (
 
 export const ProfileMenu = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const user = useSelector((state) => state.user.profile);
 
   const handleLogout = async () => {
     await dispatch(logoutUser({ userId: user.id }));
     googleLogout();
+    router.push({
+      pathname: "/",
+      query: "",
+    });
   };
 
   return (

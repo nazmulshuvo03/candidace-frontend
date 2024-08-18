@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { visitUserProfile } from "../../store/middlewares/user";
 import { clearVisitingProfile } from "../../store/slices/user";
 import { UserProfile } from "../../components/Profile";
 import { useRouter } from "next/router";
+import { AppNavigation } from "@/components/Navigation/AppNavigation";
 
 const Visit = () => {
   const router = useRouter();
@@ -22,7 +23,14 @@ const Visit = () => {
     };
   }, [isAuthenticated, userId]);
 
-  return <>{profile ? <UserProfile visit={true} /> : <div />}</>;
+  return (
+    <div className="flex w-full overflow-hidden">
+      {isAuthenticated && <AppNavigation />}
+      <div className="flex-1">
+        {profile ? <UserProfile visit={true} /> : <div />}
+      </div>
+    </div>
+  );
 };
 
 export default Visit;

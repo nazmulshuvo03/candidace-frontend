@@ -1,4 +1,5 @@
 import { AppNavigation } from "@/components/Navigation/AppNavigation";
+import withAuth from "@/hoc/withAuth";
 import Admin from "@/routes/Admin";
 import Availability from "@/routes/Availability";
 import Interviews from "@/routes/Interviews";
@@ -19,15 +20,15 @@ const Dashboard = () => {
   useEffect(() => {
     if (!slug || !slug.length) return;
 
-    const currentSlug = slug?.[0];
-    if (currentSlug === "admin") setContent(<Admin />);
-    else if (currentSlug === "availability") setContent(<Availability />);
-    else if (currentSlug === "interviews") setContent(<Interviews />);
-    else if (currentSlug === "message") setContent(<Message />);
-    else if (currentSlug === "notification") setContent(<Notification />);
-    else if (currentSlug === "people") setContent(<People />);
-    else if (currentSlug === "profile") setContent(<Profile />);
-    else if (currentSlug === "progress") setContent(<Progress />);
+    const firstSlug = slug?.[0];
+    if (firstSlug === "admin") setContent(<Admin />);
+    else if (firstSlug === "availability") setContent(<Availability />);
+    else if (firstSlug === "interviews") setContent(<Interviews />);
+    else if (firstSlug === "message") setContent(<Message />);
+    else if (firstSlug === "notification") setContent(<Notification />);
+    else if (firstSlug === "people") setContent(<People />);
+    else if (firstSlug === "profile") setContent(<Profile />);
+    else if (firstSlug === "progress") setContent(<Progress />);
     else setContent(<p>Page Not Found</p>);
   }, [slug]);
 
@@ -39,4 +40,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default withAuth(Dashboard);
