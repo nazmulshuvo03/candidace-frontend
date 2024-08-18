@@ -23,7 +23,7 @@ export const BrowseNetwork = () => {
         search: "?auth=signup",
       });
     } else {
-      router.push("/people");
+      router.push("/dashboard/people");
     }
   };
 

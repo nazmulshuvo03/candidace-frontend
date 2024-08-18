@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { visitUserProfile } from "../store/middlewares/user";
-import { clearVisitingProfile } from "../store/slices/user";
-import { UserProfile } from "../components/Profile";
+import { visitUserProfile } from "../../store/middlewares/user";
+import { clearVisitingProfile } from "../../store/slices/user";
+import { UserProfile } from "../../components/Profile";
 import { useRouter } from "next/router";
 
 const Visit = () => {

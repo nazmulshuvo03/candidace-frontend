@@ -12,7 +12,7 @@ export const Join = () => {
         search: "?auth=signup",
       });
     } else {
-      router.push("/people");
+      router.push("/dashboard/people");
     }
   };
 

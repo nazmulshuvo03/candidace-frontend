@@ -58,8 +58,18 @@ export const TabNavigation = () => {
   ];
 
   const isRouteActive = (routePath) => {
-    return router.pathname === routePath;
+    const currentPath = router.asPath.split("?")[0];
+    return currentPath === routePath;
   };
+
+  const linkClasses = (link) => `
+    text-text w-full h-8 flex justify-start items-center gap-2 cursor-pointer text-sm font-medium pl-4 md:pl-10 px-2 !text-gray-700
+    ${
+      isRouteActive(`/dashboard${link.to}`)
+        ? "bg-accent text-gray-700 cursor-default font-semibold"
+        : ""
+    }
+  `;
 
   return (
     <div className="bg-white pt-20 overflow-hidden h-full w-full border-r-2 border-slate-300 flex flex-col justify-between">
@@ -67,10 +77,8 @@ export const TabNavigation = () => {
         {navLinks.map((link) => (
           <Link
             key={link.name}
-            href={link.to}
-            isActive={() => isRouteActive(link.to)}
-            className="text-text w-full h-8 flex justify-start items-center gap-2 cursor-pointer text-sm font-medium pl-4 md:pl-10 px-2 !text-gray-700"
-            activeClassName="bg-accent text-gray-700 cursor-default font-semibold"
+            href={`/dashboard${link.to}`}
+            className={linkClasses(link).trim()}
           >
             <div className="text-base">{link.icon}</div>
             <div>{link.name}</div>

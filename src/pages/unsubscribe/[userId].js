@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "../components/Button";
-import { changeUserSubscription } from "../store/middlewares/user";
+import { Button } from "../../components/Button";
+import { changeUserSubscription } from "../../store/middlewares/user";
 import { useRouter } from "next/router";
 
 const Unsubscribe = () => {

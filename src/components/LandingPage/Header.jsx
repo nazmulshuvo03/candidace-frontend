@@ -12,7 +12,7 @@ export const Header = ({ scrollToLearnMore }) => {
         search: "?auth=signup",
       });
     } else {
-      router.push("/profile");
+      router.push("/dashboard/profile");
     }
   };
 

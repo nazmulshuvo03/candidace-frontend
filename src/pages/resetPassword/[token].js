@@ -1,8 +1,8 @@
 import { useDispatch } from "react-redux";
-import { Input } from "../components/Input";
+import { Input } from "../../components/Input";
 import { useEffect, useState } from "react";
-import { Button } from "../components/Button";
-import { resetPassword } from "../store/middlewares/auth";
+import { Button } from "../../components/Button";
+import { resetPassword } from "../../store/middlewares/auth";
 import { useRouter } from "next/router";
 
 const ResetPassword = () => {

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { validateEmailVerification } from "../store/middlewares/auth";
-import CircularProgress from "../components/ProgressBar";
+import { validateEmailVerification } from "../../store/middlewares/auth";
+import CircularProgress from "../../components/ProgressBar";
 import { useRouter } from "next/router";
 
 const Verify = () => {

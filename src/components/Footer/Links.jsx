@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export const FooterLinks = () => {
   const footerLinks = [
     {
@@ -26,15 +28,15 @@ export const FooterLinks = () => {
   return (
     <nav className="flex gap-2 flex-wrap items-center justify-center">
       {footerLinks.map((link) => (
-        <div
+        <Link
           key={link.name}
-          to={{ pathname: link.to }}
+          href={{ pathname: link.to }}
           target={link.target || ""}
           className=""
           activeClassName=""
         >
           <div className="text-xs underline font-medium">{link.name}</div>
-        </div>
+        </Link>
       ))}
     </nav>
   );

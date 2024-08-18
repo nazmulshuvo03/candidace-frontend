@@ -4,7 +4,7 @@ import { fetchPeople } from "../../store/middlewares/user";
 import { setDashboardQuery } from "../../store/slices/global";
 import { queryObjectToString } from "../../utils/query";
 import { deepEqual, isEmptyObject } from "../../utils/object";
-import { HorizontalTabs } from "../Tabs/HorizontalTabs";
+// import { HorizontalTabs } from "../Tabs/HorizontalTabs";
 import { AllPeople } from "./AllPeople";
 import { FavouritePeople } from "./FavouritePeople";
 import useDeviceSize from "../../hooks/useDeviceSize";
@@ -56,7 +56,8 @@ export const PeoplePage = () => {
         const queryString = queryObjectToString(queries);
         if (profile) {
           dispatch(fetchPeople(queryString));
-          router.push(`/people?${queryString}`);
+          console.log("!!!!!!!!!!!!!!!!!!", queryString);
+          if (queryString) router.push(`/dashboard/people?${queryString}`);
         }
       }
     }
