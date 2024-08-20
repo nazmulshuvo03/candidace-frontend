@@ -33,7 +33,6 @@ export const FooterLinks = () => {
           href={{ pathname: link.to }}
           target={link.target || ""}
           className=""
-          activeClassName=""
         >
           <div className="text-xs underline font-medium">{link.name}</div>
         </Link>

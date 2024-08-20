@@ -62,7 +62,7 @@ export const NotificationInbox = ({ setShowData }) => {
         )}
       </ul>
       <Link
-        href="/notification"
+        href="/dashboard/notification"
         className="w-full text-center py-1 text-secondary font-bold"
         onClick={() => setShowData(false)}
       >

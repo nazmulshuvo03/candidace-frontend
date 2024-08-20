@@ -65,7 +65,7 @@ export const MessageInbox = ({ setShowData }) => {
         )}
       </ul>
       <Link
-        href="/message"
+        href="/dashboard/message"
         className="w-full text-center py-1 text-secondary font-bold"
         onClick={() => setShowData(false)}
       >
