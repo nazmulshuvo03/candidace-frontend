@@ -11,9 +11,8 @@ export const FooterLinks = () => {
       name: "How it works",
     },
     {
-      to: "https://candidace.fyi/blog/",
+      to: "/blog",
       name: "Blogs",
-      target: "_blank",
     },
     {
       to: "/terms-and-conditions",

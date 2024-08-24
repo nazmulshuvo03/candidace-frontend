@@ -1,5 +1,6 @@
 import {
   faAddressCard,
+  faBlog,
   faCalendarDay,
   faChartLine,
   faClipboardQuestion,
@@ -52,6 +53,11 @@ export const TabNavigation = () => {
             to: "/admin",
             name: "Admin",
             icon: <FontAwesomeIcon icon={faScrewdriverWrench} />,
+          },
+          {
+            to: "/author",
+            name: "Author",
+            icon: <FontAwesomeIcon icon={faBlog} />,
           },
         ]
       : []),
