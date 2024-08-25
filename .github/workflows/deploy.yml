@@ -1,0 +1,45 @@
+name: Next.js Frontend Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Set up SSH
+        run: |
+          mkdir -p $HOME/.ssh
+          echo "${{ secrets.PRIVATE_KEY_PEM }}" > $HOME/.ssh/private-key.pem
+          chmod 400 $HOME/.ssh/private-key.pem
+
+      - name: Deploy to Server
+        run: |
+          ssh -o StrictHostKeyChecking=no -i $HOME/.ssh/private-key.pem ${{ secrets.USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            pm2 stop all
+            cd frontend-nextjs-v2/
+            git pull origin master
+            npm i
+            npm run build
+
+            # For Next.js, ensure the server-side application is served properly
+            sudo rsync -a --delete .next/ /var/www/html/frontend-v2
+            sudo rsync -a --delete public/ /var/www/html/frontend-v2/public
+            sudo rsync -a --delete package.json /var/www/html/frontend-v2/package.json
+            sudo rsync -a --delete server.js /var/www/html/frontend-v2/server.js
+
+            cd /home/ubuntu/
+            pm2 restart ecosystem.config.js
+            sudo systemctl reload nginx
+          EOF
