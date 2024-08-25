@@ -28,7 +28,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i $HOME/.ssh/private-key.pem ${{ secrets.USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             pm2 stop all
-            cd frontend-nextjs-v2/
+            cd ${{ secrets.APP_PATH }}
             git pull origin master
             npm i
             npm run build
