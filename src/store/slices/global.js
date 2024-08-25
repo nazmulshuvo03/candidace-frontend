@@ -6,6 +6,7 @@ const globalSlice = createSlice({
     // dark: window.matchMedia("(prefers-color-scheme: dark)").matches,
     isAuthenticated: false,
     isAdmin: false,
+    isAuthor: false,
     dark: false,
     loading: false,
     toastMessage: null, // { type: TOAST_TYPES, message: "", description: "" }
@@ -35,6 +36,9 @@ const globalSlice = createSlice({
     setAdmin: (state, action) => {
       state.isAdmin = action.payload;
     },
+    setAuthor: (state, action) => {
+      state.isAuthor = action.payload;
+    },
     setChat: (state, action) => {
       state.chat = action.payload;
     },
@@ -49,6 +53,7 @@ export const {
   setToastMessage,
   setModalMessageData,
   setAdmin,
+  setAuthor,
   setChat,
 } = globalSlice.actions;
 export const selectTheme = (state) => state.global.dark;

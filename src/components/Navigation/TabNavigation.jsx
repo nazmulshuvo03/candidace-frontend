@@ -13,55 +13,60 @@ import { LoggedFooter } from "../Footer/LoggedFooter";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+export const COMMON_AUTHENTICATED_ROUTES = [
+  {
+    to: "/people",
+    name: "People",
+    icon: <FontAwesomeIcon icon={faUsers} />,
+  },
+  {
+    to: "/profile",
+    name: "Profile",
+    icon: <FontAwesomeIcon icon={faAddressCard} />,
+  },
+  {
+    to: "/availability",
+    name: "Schedule",
+    icon: <FontAwesomeIcon icon={faCalendarDay} />,
+  },
+  {
+    to: "/progress",
+    name: "Progress",
+    icon: <FontAwesomeIcon icon={faChartLine} />,
+  },
+  {
+    to: "/interviews",
+    name: "Interviews",
+    icon: <FontAwesomeIcon icon={faClipboardQuestion} />,
+  },
+];
+
+export const AUTHOR_ROUTES = [
+  {
+    to: "/author",
+    name: "Author",
+    icon: <FontAwesomeIcon icon={faBlog} />,
+  },
+];
+
+export const ADMIN_ROUTES = [
+  ...AUTHOR_ROUTES,
+  {
+    to: "/admin",
+    name: "Admin",
+    icon: <FontAwesomeIcon icon={faScrewdriverWrench} />,
+  },
+];
+
 export const TabNavigation = () => {
   const router = useRouter();
   const global = useSelector((state) => state.global);
 
-  const navLinks = [
-    ...(global.isAuthenticated
-      ? [
-          {
-            to: "/people",
-            name: "People",
-            icon: <FontAwesomeIcon icon={faUsers} />,
-          },
-          {
-            to: "/profile",
-            name: "Profile",
-            icon: <FontAwesomeIcon icon={faAddressCard} />,
-          },
-          {
-            to: "/availability",
-            name: "Schedule",
-            icon: <FontAwesomeIcon icon={faCalendarDay} />,
-          },
-          {
-            to: "/progress",
-            name: "Progress",
-            icon: <FontAwesomeIcon icon={faChartLine} />,
-          },
-          {
-            to: "/interviews",
-            name: "Interviews",
-            icon: <FontAwesomeIcon icon={faClipboardQuestion} />,
-          },
-        ]
-      : []),
-    ...(global.isAdmin
-      ? [
-          {
-            to: "/admin",
-            name: "Admin",
-            icon: <FontAwesomeIcon icon={faScrewdriverWrench} />,
-          },
-          {
-            to: "/author",
-            name: "Author",
-            icon: <FontAwesomeIcon icon={faBlog} />,
-          },
-        ]
-      : []),
-  ];
+  const navLinks = global.isAdmin
+    ? [...COMMON_AUTHENTICATED_ROUTES, ...ADMIN_ROUTES]
+    : global.isAuthor
+    ? [...COMMON_AUTHENTICATED_ROUTES, ...AUTHOR_ROUTES]
+    : COMMON_AUTHENTICATED_ROUTES;
 
   const isRouteActive = (routePath) => {
     const currentPath = router.asPath.split("?")[0];

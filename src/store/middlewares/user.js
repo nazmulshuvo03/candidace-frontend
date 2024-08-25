@@ -20,6 +20,7 @@ import {
 import {
   setAdmin,
   setAuthenticated,
+  setAuthor,
   setLoading,
   setToastMessage,
 } from "../slices/global";
@@ -69,6 +70,7 @@ export const fetchUserProfile = (
       dispatch(setUserAvailabilities(response.data.availabilities));
       dispatch(setCompletionStatus(response.data.completionStatus));
       dispatch(setAdmin(response.data.type === "ADMIN"));
+      dispatch(setAuthor(response.data.type === "AUTHOR"));
       successHandler();
     };
     responseHandler(response, handleSuccess, errorHandler);

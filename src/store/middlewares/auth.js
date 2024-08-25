@@ -15,6 +15,7 @@ import { persistor } from "../index";
 import {
   setAdmin,
   setAuthenticated,
+  setAuthor,
   setLoading,
   setModalMessageData,
   setToastMessage,
@@ -38,6 +39,7 @@ export const logoutUser = (data) =>
       persistor.purge();
       dispatch(setAuthenticated(false));
       dispatch(setAdmin(false));
+      dispatch(setAuthor(false));
       dispatch(resetUserState());
     });
   });
@@ -57,6 +59,7 @@ export const signupUser = (data) =>
         dispatch(setCompletionStatus(response.data.completionStatus));
         // window.location.href = "/onboard";
         dispatch(setAdmin(response.data.type === "ADMIN"));
+        dispatch(setAuthor(response.data.type === "AUTHOR"));
       },
       () => {
         dispatch(
@@ -79,6 +82,7 @@ export const loginUser = (data) =>
         dispatch(setUserAvailabilities(response.data.availabilities));
         dispatch(setCompletionStatus(response.data.completionStatus));
         dispatch(setAdmin(response.data.type === "ADMIN"));
+        dispatch(setAuthor(response.data.type === "AUTHOR"));
       },
       () => {
         dispatch(
@@ -105,6 +109,7 @@ export const googleAuthUser = (data) =>
         dispatch(setModalMessageData(null));
         dispatch(setLoading(false));
         dispatch(setAdmin(response.data.type === "ADMIN"));
+        dispatch(setAuthor(response.data.type === "AUTHOR"));
       },
       () => {
         if (response.data.message === "PROFESSION_REQUIRED") {
