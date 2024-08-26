@@ -1,5 +1,7 @@
 // components/Blog/BlogDetail.js
 
+import Link from "next/link";
+
 export default function BlogDetail({ blog }) {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -16,7 +18,9 @@ export default function BlogDetail({ blog }) {
         dangerouslySetInnerHTML={{ __html: blog.content }}
       />
       <div className="text-sm text-gray-500 mt-4">
-        <span>By {blog.profile?.userName || "Unknown Author"}</span> |{" "}
+        <Link href={`/blog/author/${blog.authorId}`}>
+          {blog.profile?.userName || "Unknown Author"}
+        </Link>
         <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
       </div>
     </div>

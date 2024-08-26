@@ -12,7 +12,7 @@ export default function CategoryList({ categories }) {
           categories.data.length > 0 &&
           categories.data.map((category) => (
             <li key={category.id}>
-              <Link href={`#`}>
+              <Link href={`/blog/category/${category.slug}`}>
                 <span className="text-blue-600 hover:text-blue-800 cursor-pointer">
                   {category.name}
                 </span>

@@ -19,7 +19,7 @@ export default function BlogAuthorDashboard() {
           }
         );
         const data = await response.json();
-        setBlogs(data.data);
+        setBlogs(data.data.blogs);
       } catch (error) {
         console.error("Error fetching blogs:", error);
       }

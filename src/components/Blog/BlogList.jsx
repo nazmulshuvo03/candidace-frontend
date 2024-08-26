@@ -21,7 +21,9 @@ export default function BlogList({ blogs }) {
               </h3>
               <p className="text-gray-700 mb-4">{blog.excerpt}</p>
               <div className="text-sm text-gray-500">
-                <span>By {blog.profile?.userName || "Unknown Author"}</span> |{" "}
+                <Link href={`/blog/author/${blog.authorId}`}>
+                  {blog.profile?.userName || "Unknown Author"}
+                </Link>{" "}
                 <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
               </div>
             </li>
