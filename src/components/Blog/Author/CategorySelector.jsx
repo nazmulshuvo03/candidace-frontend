@@ -1,5 +1,6 @@
 // components/CategorySelector.js
 
+import { createCategory, fetchAllCategories } from "@/services/functions/blog";
 import { useState, useEffect } from "react";
 
 export default function CategorySelector({
@@ -11,11 +12,9 @@ export default function CategorySelector({
   const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
 
   useEffect(() => {
-    // Fetch categories from the API
     async function fetchCategories() {
       try {
-        const res = await fetch("http://localhost:4040/api/v1/blog/categories");
-        const data = await res.json();
+        const data = await fetchAllCategories();
         setCategories(data.data.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -26,29 +25,17 @@ export default function CategorySelector({
   }, []);
 
   const handleAddNewCategory = async () => {
-    try {
-      const res = await fetch("http://localhost:4040/api/v1/blog/categories", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name: newCategory }),
-      });
-      const data = await res.json();
+    const data = await createCategory({ name: newCategory });
 
-      if (data.success) {
-        setCategories((prev) => {
-          return [...prev, data.data];
-        });
-        setSelectedCategory(data.data.id);
-        setNewCategory("");
-        setShowNewCategoryInput(false);
-      } else {
-        console.error("Failed to create category", data.message);
-      }
-    } catch (error) {
-      console.error("Error creating category:", error);
+    if (data && data.success) {
+      setCategories((prev) => {
+        return [...prev, data.data];
+      });
+      setSelectedCategory(data.data.id);
+      setNewCategory("");
+      setShowNewCategoryInput(false);
+    } else {
+      console.error("Failed to create category", data.message);
     }
   };
 

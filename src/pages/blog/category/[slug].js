@@ -1,8 +1,7 @@
-// pages/blog/category/[slug].js
-
+import { fetchBlogsOfCategory } from "@/services/functions/blog";
 import Link from "next/link";
 
-export default function CategoryBlogsPage({ category, blogs }) {
+export default function CategoryBlogsPage({ all, category, blogs }) {
   if (!category) {
     return (
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -40,18 +39,12 @@ export default function CategoryBlogsPage({ category, blogs }) {
   );
 }
 
-// pages/blog/category/[slug].js
 export async function getServerSideProps(context) {
   const { slug } = context.params;
 
   try {
-    // Fetch blogs by category slug
-    const res = await fetch(
-      `http://localhost:4040/api/v1/blog/categories/${slug}`
-    );
-    const data = await res.json();
+    const data = await fetchBlogsOfCategory(slug);
 
-    // Check if the data structure is correct and contains the necessary information
     if (!data.success || !data.data) {
       return {
         notFound: true,
@@ -60,6 +53,7 @@ export async function getServerSideProps(context) {
 
     return {
       props: {
+        all: await fetchBlogsOfCategory(slug),
         category: data.data.category || null,
         blogs: data.data.blogs || [],
       },

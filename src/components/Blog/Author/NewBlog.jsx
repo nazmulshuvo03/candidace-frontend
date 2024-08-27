@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import CategorySelector from "./CategorySelector";
+import { createBlog } from "@/services/functions/blog";
 
 const RichTextEditor = dynamic(() => import("@/components/RichTextEditor"), {
   ssr: false,
@@ -21,26 +22,18 @@ export default function NewBlogPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:4040/api/v1/blog", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title,
-        content,
-        excerpt,
-        featuredImage,
-        categoryId: selectedCategory,
-        tags: tags.split(",").map((tag) => tag.trim()),
-        status,
-        seoMetaDescription,
-      }),
+    const data = await createBlog({
+      title,
+      content,
+      excerpt,
+      featuredImage,
+      categoryId: selectedCategory,
+      tags: tags.split(",").map((tag) => tag.trim()),
+      status,
+      seoMetaDescription,
     });
-    const data = await res.json();
 
-    if (data.success) {
+    if (data && data.success) {
       router.push("/dashboard/author");
     } else {
       console.error("Failed to create blog");

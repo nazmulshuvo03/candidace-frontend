@@ -1,14 +1,7 @@
-// pages/dashboard/author/[authorId].js
-
-import { useRouter } from "next/router";
+import { fetchBlogsOfAuthor } from "@/services/functions/blog";
 import Link from "next/link";
-import { useSelector } from "react-redux";
 
 export default function AuthorBlogsPage({ author, blogs }) {
-  const router = useRouter();
-  const { authorId } = router.query;
-  const currentUser = useSelector((state) => state.user.profile);
-
   if (!author) {
     return (
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -45,16 +38,11 @@ export default function AuthorBlogsPage({ author, blogs }) {
   );
 }
 
-// Server-side data fetching
 export async function getServerSideProps(context) {
   const { authorId } = context.params;
 
   try {
-    // Fetch blogs by authorId
-    const res = await fetch(
-      `http://localhost:4040/api/v1/blog/author/${authorId}`
-    );
-    const data = await res.json();
+    const data = await fetchBlogsOfAuthor(authorId);
 
     if (!data.success || !data.data) {
       return {

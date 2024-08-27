@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import BlogDetail from "@/components/Blog/BlogDetail";
+import { fetchAllBlogs, fetchSingleBlog } from "@/services/functions/blog";
 
 export default function BlogDetailPage({ blog }) {
   const router = useRouter();
@@ -16,9 +17,7 @@ export default function BlogDetailPage({ blog }) {
 }
 
 export async function getStaticPaths() {
-  // Fetch all blogs to generate paths for static generation
-  const res = await fetch("http://localhost:4040/api/v1/blog");
-  const blogs = await res.json();
+  const blogs = await fetchAllBlogs();
 
   const paths = blogs.data.data.map((blog) => ({
     params: { slug: blog.slug },
@@ -32,13 +31,9 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   try {
-    // Fetch blog by slug
-    const res = await fetch(
-      `http://localhost:4040/api/v1/blog/slug/${params.slug}`
-    );
-    const blog = await res.json();
+    const blog = await fetchSingleBlog(params.slug);
 
-    if (!blog.data) {
+    if (!blog.success) {
       return {
         notFound: true,
       };

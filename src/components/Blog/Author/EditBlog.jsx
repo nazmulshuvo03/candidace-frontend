@@ -3,6 +3,11 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
 import CategorySelector from "./CategorySelector";
+import {
+  fetchAllCategories,
+  fetchSingleBlog,
+  updateBlog,
+} from "@/services/functions/blog";
 
 const RichTextEditor = dynamic(() => import("@/components/RichTextEditor"), {
   ssr: false,
@@ -23,34 +28,23 @@ export default function EditBlogPage({ slug }) {
   const [seoMetaDescription, setSeoMetaDescription] = useState("");
 
   useEffect(() => {
-    // Fetch blog data by slug and categories
     async function fetchBlogData() {
-      try {
-        const [blogRes, categoriesRes] = await Promise.all([
-          fetch(`http://localhost:4040/api/v1/blog/slug/${slug}`),
-          fetch("http://localhost:4040/api/v1/blog/categories"),
-        ]);
+      const blogData = await fetchSingleBlog(slug);
+      const categoriesData = await fetchAllCategories();
 
-        const blogData = await blogRes.json();
-        const categoriesData = await categoriesRes.json();
-
-        if (blogData.success && categoriesData.success) {
-          const blog = blogData.data;
-          setBlogId(blog.id);
-          setTitle(blog.title);
-          setContent(blog.content);
-          setExcerpt(blog.excerpt || "");
-          setFeaturedImage(blog.featuredImage || "");
-          setSelectedCategory(blog.categoryId || "");
-          setTags(blog.tags ? blog.tags.join(", ") : "");
-          setStatus(blog.status || "draft");
-          setSeoMetaDescription(blog.seoMetaDescription || "");
-        } else {
-          console.error("Failed to load blog data or categories.");
-          router.push("/dashboard/author");
-        }
-      } catch (error) {
-        console.error("Error fetching blog data:", error);
+      if (blogData.success && categoriesData.success) {
+        const blog = blogData.data;
+        setBlogId(blog.id);
+        setTitle(blog.title);
+        setContent(blog.content);
+        setExcerpt(blog.excerpt || "");
+        setFeaturedImage(blog.featuredImage || "");
+        setSelectedCategory(blog.categoryId || "");
+        setTags(blog.tags ? blog.tags.join(", ") : "");
+        setStatus(blog.status || "draft");
+        setSeoMetaDescription(blog.seoMetaDescription || "");
+      } else {
+        console.error("Failed to load blog data or categories.");
         router.push("/dashboard/author");
       }
     }
@@ -62,38 +56,21 @@ export default function EditBlogPage({ slug }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const data = await updateBlog(blogId, {
+      title,
+      content,
+      excerpt,
+      featuredImage,
+      categoryId: selectedCategory,
+      tags: tags.split(",").map((tag) => tag.trim()),
+      status,
+      seoMetaDescription,
+    });
 
-    try {
-      const response = await fetch(
-        `http://localhost:4040/api/v1/blog/${blogId}`,
-        {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title,
-            content,
-            excerpt,
-            featuredImage,
-            categoryId: selectedCategory,
-            tags: tags.split(",").map((tag) => tag.trim()),
-            status,
-            seoMetaDescription,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (data.success) {
-        router.push("/dashboard/author");
-      } else {
-        console.error("Failed to update blog.");
-      }
-    } catch (error) {
-      console.error("Error updating blog:", error);
+    if (data && data.success) {
+      router.push("/dashboard/author");
+    } else {
+      console.error("Failed to update blog.");
     }
   };
 

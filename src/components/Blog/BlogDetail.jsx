@@ -1,5 +1,3 @@
-// components/Blog/BlogDetail.js
-
 import Link from "next/link";
 
 export default function BlogDetail({ blog }) {

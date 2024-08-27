@@ -1,5 +1,3 @@
-// components/Blog/BlogList.js
-
 import Link from "next/link";
 
 export default function BlogList({ blogs }) {

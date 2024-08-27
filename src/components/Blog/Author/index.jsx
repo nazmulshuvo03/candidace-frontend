@@ -1,5 +1,4 @@
-// pages/dashboard/blog/index.js
-
+import { fetchBlogsOfAuthor } from "@/services/functions/blog";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -10,19 +9,8 @@ export default function BlogAuthorDashboard() {
 
   useEffect(() => {
     async function fetchBlogs() {
-      try {
-        const response = await fetch(
-          `http://localhost:4040/api/v1/blog/author/${author.id}`,
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
-        const data = await response.json();
-        setBlogs(data.data.blogs);
-      } catch (error) {
-        console.error("Error fetching blogs:", error);
-      }
+      const data = await fetchBlogsOfAuthor(author.id);
+      setBlogs(data.data.blogs);
     }
 
     if (author?.id) {

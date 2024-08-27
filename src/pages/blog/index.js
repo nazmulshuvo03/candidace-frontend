@@ -1,5 +1,6 @@
 import BlogList from "@/components/Blog/BlogList";
 import CategoryList from "@/components/Blog/CategoryList";
+import { fetchAllBlogs, fetchAllCategories } from "@/services/functions/blog";
 
 export default function BlogPage({ blogs, categories }) {
   return (
@@ -12,13 +13,14 @@ export default function BlogPage({ blogs, categories }) {
 
 export async function getServerSideProps() {
   try {
-    const blogRes = await fetch(`http://localhost:4040/api/v1/blog`);
-    const categoryRes = await fetch(
-      `http://localhost:4040/api/v1/blog/categories`
-    );
+    const blogsData = await fetchAllBlogs();
+    const categoriesData = await fetchAllCategories();
 
-    const blogsData = await blogRes.json();
-    const categoriesData = await categoryRes.json();
+    if (!blogsData.success || !blogsData.data) {
+      return {
+        notFound: true,
+      };
+    }
 
     return {
       props: {
