@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import CategorySelector from "./CategorySelector";
 
 const RichTextEditor = dynamic(() => import("@/components/RichTextEditor"), {
   ssr: false,
@@ -12,23 +13,10 @@ export default function NewBlogPage() {
   const [content, setContent] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [featuredImage, setFeaturedImage] = useState("");
-  const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [tags, setTags] = useState("");
   const [status, setStatus] = useState("draft");
   const [seoMetaDescription, setSeoMetaDescription] = useState("");
-  const [commentsEnabled, setCommentsEnabled] = useState(true);
-
-  useEffect(() => {
-    // Fetch categories from the API
-    async function fetchCategories() {
-      const res = await fetch("http://localhost:4040/api/v1/blog/categories");
-      const data = await res.json();
-      setCategories(data.data);
-    }
-
-    fetchCategories();
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,11 +36,11 @@ export default function NewBlogPage() {
         tags: tags.split(",").map((tag) => tag.trim()),
         status,
         seoMetaDescription,
-        commentsEnabled,
       }),
     });
+    const data = await res.json();
 
-    if (res.ok) {
+    if (data.success) {
       router.push("/dashboard/author");
     } else {
       console.error("Failed to create blog");
@@ -109,26 +97,10 @@ export default function NewBlogPage() {
 
           {/* Right Column */}
           <div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Category
-              </label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              >
-                <option value="">Select a category</option>
-                {categories &&
-                  categories.data &&
-                  categories.data.length &&
-                  categories.data.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-              </select>
-            </div>
+            <CategorySelector
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+            />
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Tags (comma separated)
@@ -164,17 +136,6 @@ export default function NewBlogPage() {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 rows="3"
               ></textarea>
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Comments Enabled
-              </label>
-              <input
-                type="checkbox"
-                checked={commentsEnabled}
-                onChange={(e) => setCommentsEnabled(e.target.checked)}
-                className="shadow appearance-none border rounded text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
             </div>
           </div>
         </div>

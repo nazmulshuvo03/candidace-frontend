@@ -1,9 +1,8 @@
-// pages/dashboard/author/edit/[slug].js
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
+import CategorySelector from "./CategorySelector";
 
 const RichTextEditor = dynamic(() => import("@/components/RichTextEditor"), {
   ssr: false,
@@ -18,12 +17,10 @@ export default function EditBlogPage({ slug }) {
   const [content, setContent] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [featuredImage, setFeaturedImage] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [tags, setTags] = useState("");
   const [status, setStatus] = useState("draft");
   const [seoMetaDescription, setSeoMetaDescription] = useState("");
-  const [commentsEnabled, setCommentsEnabled] = useState(true);
-  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     // Fetch blog data by slug and categories
@@ -37,19 +34,17 @@ export default function EditBlogPage({ slug }) {
         const blogData = await blogRes.json();
         const categoriesData = await categoriesRes.json();
 
-        if (blogRes.ok && categoriesRes.ok) {
+        if (blogData.success && categoriesData.success) {
           const blog = blogData.data;
           setBlogId(blog.id);
           setTitle(blog.title);
           setContent(blog.content);
           setExcerpt(blog.excerpt || "");
           setFeaturedImage(blog.featuredImage || "");
-          setCategoryId(blog.categoryId || "");
+          setSelectedCategory(blog.categoryId || "");
           setTags(blog.tags ? blog.tags.join(", ") : "");
           setStatus(blog.status || "draft");
           setSeoMetaDescription(blog.seoMetaDescription || "");
-          setCommentsEnabled(blog.commentsEnabled !== false);
-          setCategories(categoriesData.data);
         } else {
           console.error("Failed to load blog data or categories.");
           router.push("/dashboard/author");
@@ -82,16 +77,17 @@ export default function EditBlogPage({ slug }) {
             content,
             excerpt,
             featuredImage,
-            categoryId,
+            categoryId: selectedCategory,
             tags: tags.split(",").map((tag) => tag.trim()),
             status,
             seoMetaDescription,
-            commentsEnabled,
           }),
         }
       );
 
-      if (response.ok) {
+      const data = await response.json();
+
+      if (data.success) {
         router.push("/dashboard/author");
       } else {
         console.error("Failed to update blog.");
@@ -102,7 +98,7 @@ export default function EditBlogPage({ slug }) {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="h-full max-w-6xl mx-auto px-4 py-8 overflow-y-auto">
       <h1 className="text-3xl font-bold mb-6">Edit Blog</h1>
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -151,26 +147,10 @@ export default function EditBlogPage({ slug }) {
 
           {/* Right Column */}
           <div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Category
-              </label>
-              <select
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              >
-                <option value="">Select a category</option>
-                {categories &&
-                  categories.data &&
-                  categories.data.length &&
-                  categories.data.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-              </select>
-            </div>
+            <CategorySelector
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+            />
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Tags (comma separated)
@@ -206,17 +186,6 @@ export default function EditBlogPage({ slug }) {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 rows="3"
               ></textarea>
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Comments Enabled
-              </label>
-              <input
-                type="checkbox"
-                checked={commentsEnabled}
-                onChange={(e) => setCommentsEnabled(e.target.checked)}
-                className="shadow appearance-none border rounded text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
             </div>
           </div>
         </div>
