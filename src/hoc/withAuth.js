@@ -34,11 +34,14 @@ const withAuth = (WrappedComponent) => {
         const slugInAuthorRoutes = AUTHOR_ROUTES.some(
           (route) => route.to === `/${firstSlug}`
         );
-        if (global.isAuthor && !slugInAuthorRoutes) {
+        if (global.isAuthor && !(slugInAuthorRoutes || slugInCommonRoutes)) {
           router.push({
             pathname: "/dashboard/people",
           });
-        } else if (global.isAdmin && !slugInAdminRoutes) {
+        } else if (
+          global.isAdmin &&
+          !(slugInAdminRoutes || slugInCommonRoutes)
+        ) {
           router.push({
             pathname: "/dashboard/people",
           });
