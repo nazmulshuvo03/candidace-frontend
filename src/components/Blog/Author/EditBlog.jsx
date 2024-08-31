@@ -35,8 +35,6 @@ export default function EditBlogPage({ slug }) {
     }
   }, [slug]);
 
-  console.log("$$$$$$$$$$$$$$$", initialData);
-
   const handleSubmit = async (blogData) => {
     const data = await updateBlog(initialData.id, blogData);
 
