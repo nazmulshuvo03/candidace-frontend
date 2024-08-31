@@ -56,6 +56,7 @@ export default function EditBlogPage({ slug }) {
       <BlogForm
         initialData={initialData}
         onSubmit={handleSubmit}
+        heading={"Edit Blog"}
         submitButtonText="Update Blog"
       />
     </div>

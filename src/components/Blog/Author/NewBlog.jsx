@@ -17,7 +17,11 @@ export default function NewBlogPage() {
 
   return (
     <div className="h-full max-w-6xl mx-auto px-4 py-8">
-      <BlogForm onSubmit={handleSubmit} submitButtonText="Publish Blog" />
+      <BlogForm
+        onSubmit={handleSubmit}
+        heading={"Write a New Blog"}
+        submitButtonText="Publish Blog"
+      />
     </div>
   );
 }
