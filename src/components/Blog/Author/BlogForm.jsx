@@ -30,9 +30,6 @@ export default function BlogForm({
   );
   const [tags, setTags] = useState(initialData.tags || "");
   const [status, setStatus] = useState(initialData.status || "draft");
-  const [seoMetaDescription, setSeoMetaDescription] = useState(
-    initialData.seoMetaDescription || ""
-  );
   const [newImage, setNewImage] = useState(null);
 
   const handleImageSubmit = async () => {
@@ -53,7 +50,6 @@ export default function BlogForm({
       categoryId: selectedCategory,
       tags: tags.split(",").map((tag) => tag.trim()),
       status,
-      seoMetaDescription,
     });
   };
 
@@ -128,18 +124,6 @@ export default function BlogForm({
             type="text"
             value={tags}
             onChange={(e) => setTags(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-4">
-          <Input
-            label={" SEO Meta Description"}
-            type="textArea"
-            placeholder=" SEO Meta Description..."
-            value={seoMetaDescription}
-            onChange={(e) => setSeoMetaDescription(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            rows="3"
           />
         </div>
       </div>

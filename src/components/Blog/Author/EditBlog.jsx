@@ -22,7 +22,6 @@ export default function EditBlogPage({ slug }) {
           categoryId: blog.categoryId || "",
           tags: blog.tags ? blog.tags.join(", ") : "",
           status: blog.status || "draft",
-          seoMetaDescription: blog.seoMetaDescription || "",
         });
       } else {
         console.error("Failed to load blog data.");
