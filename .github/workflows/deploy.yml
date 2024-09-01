@@ -1,0 +1,29 @@
+name: Next.js Frontend Deployment
+
+on:
+  push:
+    branches:
+      - main # Adjust this to your main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16" # Specify the Node.js version you're using
+
+      - name: Set up SSH
+        run: |
+          mkdir -p $HOME/.ssh
+          echo "${{ secrets.PRIVATE_KEY_PEM }}" > $HOME/.ssh/private-key.pem
+          chmod 400 $HOME/.ssh/private-key.pem
+
+      - name: Deploy to Server
+        run: |
+          ssh -o StrictHostKeyChecking=no -i $HOME/.ssh/private-key.pem ${{ secrets.USER }}@${{ secrets.SERVER_IP }} "cd ${{ secrets.APP_PATH }} && git pull origin master && npm i && npm run build && cd .. && pm2 restart ecosystem.config.js"
