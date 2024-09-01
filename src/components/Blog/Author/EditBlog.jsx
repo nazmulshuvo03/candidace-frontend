@@ -50,11 +50,10 @@ export default function EditBlogPage({ slug }) {
   }
 
   return (
-    <div className="h-full max-w-6xl mx-auto px-4 py-8">
+    <div className="h-full px-4 py-4">
       <BlogForm
         initialData={initialData}
         onSubmit={handleSubmit}
-        heading={"Edit Blog"}
         submitButtonText="Update Blog"
       />
     </div>

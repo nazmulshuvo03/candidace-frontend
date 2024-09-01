@@ -33,7 +33,8 @@ export const Dropdown = ({
     setFilteredOptions(options);
   };
 
-  const handleAddNewClick = async () => {
+  const handleAddNewClick = async (e) => {
+    e.preventDefault();
     const response = await addNewAction({ name: query });
     if (response) handleSelect(response);
     setQuery("");
@@ -95,7 +96,7 @@ export const Dropdown = ({
           >
             {value && options && options.length ? (
               <span className="">
-                {options.find((option) => option.id === value)[defaultLabel]}
+                {options.find((option) => option.id === value)?.[defaultLabel]}
               </span>
             ) : (
               <span className="text-gray-400">{defaultText}</span>

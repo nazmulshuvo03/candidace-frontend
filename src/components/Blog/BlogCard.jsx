@@ -2,10 +2,16 @@ import Link from "next/link";
 import { Tooltip } from "../Tooltip";
 import moment from "moment";
 
-export default function BlogCard({ blog }) {
+export default function BlogCard({ blog, authorMode = false }) {
   return (
     <li className="bg-white shadow-md rounded-lg">
-      <Link href={`/blog/${blog.slug}`}>
+      <Link
+        href={
+          authorMode
+            ? `/dashboard/author/edit/${blog.slug}`
+            : `/blog/${blog.slug}`
+        }
+      >
         <img
           src={blog.featuredImage}
           alt="Featured Image"
@@ -13,7 +19,13 @@ export default function BlogCard({ blog }) {
         />
       </Link>
       <div className="px-4 pt-2 pb-4">
-        <Link href={`/blog/${blog.slug}`}>
+        <Link
+          href={
+            authorMode
+              ? `/dashboard/author/edit/${blog.slug}`
+              : `/blog/${blog.slug}`
+          }
+        >
           <Tooltip text={blog.title} className={"!whitespace-normal"}>
             <div className="text-xl font-semibold mb-2 line-clamp-2 h-14">
               {blog.title}

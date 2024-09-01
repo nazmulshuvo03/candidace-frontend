@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import BlogDetail from "@/components/Blog/BlogDetail";
 import { fetchAllBlogs, fetchSingleBlog } from "@/services/functions/blog";
+import Head from "next/head";
 
 export default function BlogDetailPage({ blog }) {
   const router = useRouter();
@@ -10,9 +11,17 @@ export default function BlogDetailPage({ blog }) {
   }
 
   return (
-    <div className="w-full px-4 py-8">
-      <BlogDetail blog={blog} />
-    </div>
+    <>
+      <Head>
+        <title>{blog.title}</title>
+        <meta name="robots" content="index, follow" />
+        <meta name="description" content={blog.excerpt} />
+        <meta name="author" content={blog?.profile?.userName} />
+      </Head>
+      <main className="w-full px-4 py-8">
+        <BlogDetail blog={blog} />
+      </main>
+    </>
   );
 }
 

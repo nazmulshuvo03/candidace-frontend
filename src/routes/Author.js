@@ -5,7 +5,7 @@ import NewBlogPage from "@/components/Blog/Author/NewBlog";
 const Author = ({ slugs = [] }) => {
   const secondSlug = slugs[1];
   return (
-    <div>
+    <>
       {secondSlug === "new" ? (
         <NewBlogPage />
       ) : secondSlug === "edit" ? (
@@ -13,7 +13,7 @@ const Author = ({ slugs = [] }) => {
       ) : (
         <BlogAuthorDashboard />
       )}
-    </div>
+    </>
   );
 };
 
