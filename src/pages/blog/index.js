@@ -4,9 +4,13 @@ import { fetchAllBlogs, fetchAllCategories } from "@/services/functions/blog";
 
 export default function BlogPage({ blogs, categories }) {
   return (
-    <div>
-      <CategoryList categories={categories} />
-      <BlogList blogs={blogs} />
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="lg:col-span-3">
+        <BlogList blogs={blogs} />
+      </div>
+      <div className="lg:col-span-1">
+        <CategoryList categories={categories} />
+      </div>
     </div>
   );
 }

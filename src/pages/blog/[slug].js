@@ -10,7 +10,7 @@ export default function BlogDetailPage({ blog }) {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="w-full px-4 py-8">
       <BlogDetail blog={blog} />
     </div>
   );

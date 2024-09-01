@@ -1,5 +1,5 @@
+import BlogCard from "@/components/Blog/BlogCard";
 import { fetchBlogsOfAuthor } from "@/services/functions/blog";
-import Link from "next/link";
 
 export default function AuthorBlogsPage({ author, blogs }) {
   if (!author) {
@@ -13,23 +13,13 @@ export default function AuthorBlogsPage({ author, blogs }) {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Blogs by {author.userName}</h1>
-      <ul className="space-y-8 mt-6">
+      <div className="text-3xl font-bold pt-2 pb-2">
+        <span className="text-gray-500">Blogs by</span>{" "}
+        <span className="text-secondary">@{author.userName}</span>
+      </div>
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
         {blogs.length > 0 ? (
-          blogs.map((blog) => (
-            <li key={blog.id} className="bg-white shadow-md rounded-lg p-6">
-              <h3 className="text-2xl font-semibold text-gray-800 mb-2">
-                <Link href={`/blog/${blog.slug}`}>{blog.title}</Link>
-              </h3>
-              <p className="text-gray-700 mb-4">{blog.excerpt}</p>
-              <div className="text-sm text-gray-500">
-                <span>By {blog.profile?.userName || "Unknown Author"}</span> |{" "}
-                <span>
-                  Published on {new Date(blog.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-            </li>
-          ))
+          blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)
         ) : (
           <p>No blogs found for this author.</p>
         )}

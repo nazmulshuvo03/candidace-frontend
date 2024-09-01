@@ -1,10 +1,12 @@
+import BlogCard from "@/components/Blog/BlogCard";
 import { fetchBlogsOfCategory } from "@/services/functions/blog";
+import moment from "moment";
 import Link from "next/link";
 
-export default function CategoryBlogsPage({ all, category, blogs }) {
+export default function CategoryBlogsPage({ category, blogs }) {
   if (!category) {
     return (
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="px-4 py-8">
         <h1 className="text-3xl font-bold">Category Not Found</h1>
         <p>The category you are looking for does not exist.</p>
       </div>
@@ -12,25 +14,34 @@ export default function CategoryBlogsPage({ all, category, blogs }) {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold">Blogs in "{category.name}"</h1>
-      <p className="mb-6">Creator: {category?.creator?.userName}</p>
-      <ul className="space-y-8">
+    <div className="px-4 py-8">
+      <div className="mb-6">
+        <div className="text-3xl font-bold pt-2 pb-2">
+          <span className="text-gray-500">Blogs in</span>{" "}
+          <span className="text-secondary">{category.name}</span>
+        </div>
+        <div className="flex gap-4 items-center">
+          <Link
+            href={`/blog/author/${category?.creator?.id}`}
+            className="flex gap-2 items-center py-1"
+          >
+            <img
+              src={category?.creator?.photoURL}
+              alt={category?.creator?.userName}
+              className="h-6 w-6 rounded-full"
+            />
+            <div className="text-md font-semibold">
+              @{category?.creator?.userName}
+            </div>
+          </Link>
+          <div className="text-md text-gray-500">
+            {moment(category.createdAt).format("MMM DD, YYYY")}
+          </div>
+        </div>
+      </div>
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
         {blogs.length > 0 ? (
-          blogs.map((blog) => (
-            <li key={blog.id} className="bg-white shadow-md rounded-lg p-6">
-              <h3 className="text-2xl font-semibold text-gray-800 mb-2">
-                <Link href={`/blog/${blog.slug}`}>{blog.title}</Link>
-              </h3>
-              <p className="text-gray-700 mb-4">{blog.excerpt}</p>
-              <div className="text-sm text-gray-500">
-                <span>By {blog.profile?.userName || "Unknown Author"}</span> |{" "}
-                <span>
-                  Published on {new Date(blog.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-            </li>
-          ))
+          blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)
         ) : (
           <p>No blogs found in this category.</p>
         )}
