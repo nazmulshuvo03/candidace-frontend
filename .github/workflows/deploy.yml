@@ -1,4 +1,4 @@
-name: Next.js Frontend Deployment
+name: Candidace Frontend Deployment
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16" # Specify the Node.js version you're using
+          node-version: "20"
 
       - name: Set up SSH
         run: |
