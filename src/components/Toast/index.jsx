@@ -24,7 +24,7 @@ const Toast = ({
   useEffect(() => {
     const timeout = setTimeout(() => {
       setVisible(false);
-      dispatch(handleClose());
+      handleClose();
     }, duration);
     return () => clearTimeout(timeout);
   }, []);
