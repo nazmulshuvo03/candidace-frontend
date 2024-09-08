@@ -84,14 +84,14 @@ export const Login = ({ switchMode = () => {} }) => {
               }))
             }
           />
-          <div className="py-2 flex items-center justify-start gap-1 text-xs text-secondary">
-            <input
-              type="checkbox"
-              value={remember}
-              onChange={(e) => setRemember((prev) => !prev)}
-            />
-            <span>Remember me</span>
-          </div>
+          {/* <div className="py-2 flex items-center justify-start gap-1 text-xs text-secondary"> */}
+          {/*   <input */}
+          {/*     type="checkbox" */}
+          {/*     value={remember} */}
+          {/*     onChange={(e) => setRemember((prev) => !prev)} */}
+          {/*   /> */}
+          {/*   <span>Remember me</span> */}
+          {/* </div> */}
           <div className="text-xs text-red-500 font-medium min-h-4 text-center">
             {errorMessage}
           </div>

@@ -16,6 +16,7 @@ export const Input = ({
         />
       ) : (
         <input
+          type={type}
           {...rest}
           className={`border rounded-lg text-sm px-4 py-2 w-full bg-white ${className}`}
         />
