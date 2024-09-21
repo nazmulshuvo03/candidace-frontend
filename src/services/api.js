@@ -22,8 +22,9 @@ const asyncWrapper = (fn) => {
   };
 };
 
-export const fetchContent = asyncWrapper(async (url) => {
+export const fetchContent = asyncWrapper(async (url, params) => {
   const response = await axios.get(`${baseUrl}${url}`, {
+    params: { ...params },
     withCredentials: true,
   });
   return response.data;

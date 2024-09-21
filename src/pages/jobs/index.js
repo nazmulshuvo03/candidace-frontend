@@ -5,9 +5,14 @@ export default function Jobs({ jobs }) {
   return <JobBoard data={jobs} />;
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const { searchTerm = "", page = 1 } = context.query;
+
   try {
-    const jobsData = await fetchAllJobs();
+    const jobsData = await fetchAllJobs({
+      searchTerm,
+      page,
+    });
 
     if (!jobsData.success || !jobsData.data) {
       return {
