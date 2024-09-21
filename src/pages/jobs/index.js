@@ -2,11 +2,7 @@ import JobBoard from "@/components/JobBoard";
 import { fetchAllJobs } from "@/services/functions/job";
 
 export default function Jobs({ jobs }) {
-  return (
-    <div>
-      <JobBoard data={jobs} />
-    </div>
-  );
+  return <JobBoard data={jobs} />;
 }
 
 export async function getServerSideProps() {

@@ -1,6 +1,10 @@
+import moment from "moment";
 import { Button } from "../Button";
+import { useSelector } from "react-redux";
 
 export const JobCard = ({ data }) => {
+  const global = useSelector((state) => state.global);
+
   return (
     <div className={"w-full my-3 bg-white shadow-lg rounded-md px-8 py-4"}>
       <div className="flex gap-4">
@@ -16,8 +20,11 @@ export const JobCard = ({ data }) => {
           <div className="font-normal text-gray-500 text-md">
             {data.companyName}
           </div>
+          {global?.isAdmin && (
+            <div className="text-xs font-bold">{data.source}</div>
+          )}
         </div>
-        <div className="flex items-start">
+        <div className="flex flex-col justify-start items-end gap-2">
           <Button
             className={
               "!border-2 !border-secondary !rounded-md !bg-white !text-secondary"
@@ -28,6 +35,9 @@ export const JobCard = ({ data }) => {
           >
             Apply
           </Button>
+          <div className="text-gray-500 text-xs font-bold">
+            {moment(data.datePosted).fromNow()}
+          </div>
         </div>
       </div>
       <div className="flex flex-wrap gap-1 pt-4 justify-end">
