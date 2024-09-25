@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { JobCard } from "./JobCard";
 import { Search } from "../Search";
+import { Pagination } from "../Pagination";
 
-export default function JobBoard({ data }) {
+export default function JobBoard({ data, count }) {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const router = useRouter();
@@ -22,15 +23,21 @@ export default function JobBoard({ data }) {
     router.push("/jobs");
   };
 
-  const handlePagination = (newPage) => {
-    setPage((prev) => prev + 1);
-    router.push({
-      pathname: "/jobs",
-      query: { searchTerm: query || router.query.searchTerm, page: newPage },
-    });
+  const handlePageNumberClick = (event) => {
+    const newPageNumber = event.selected + 1;
+    setPage(newPageNumber);
+    if (newPageNumber === 1) {
+      router.push("/jobs");
+    } else {
+      router.push({
+        pathname: "/jobs",
+        query: {
+          searchTerm: query || router.query.searchTerm,
+          page: newPageNumber,
+        },
+      });
+    }
   };
-
-  console.log("@@@@@@@@@@@@", query, page, data);
 
   return (
     <div className="w-full p-6">
@@ -41,13 +48,6 @@ export default function JobBoard({ data }) {
         setQuery={setQuery}
         showResetSearch={query && query.length}
       />
-      {/* <button */}
-      {/*   onClick={() => handlePagination(page > 1 ? page - 1 : 1)} */}
-      {/*   disabled={page === 1} */}
-      {/* > */}
-      {/*   Previous Page */}
-      {/* </button> */}
-      {/* <button onClick={() => handlePagination(page + 1)}>Next Page</button> */}
 
       {data && data.length ? (
         <div>
@@ -58,6 +58,11 @@ export default function JobBoard({ data }) {
       ) : (
         <div>Loading...</div>
       )}
+
+      <Pagination
+        pageCount={Math.ceil(count / 10)}
+        handlePageClick={handlePageNumberClick}
+      />
     </div>
   );
 }

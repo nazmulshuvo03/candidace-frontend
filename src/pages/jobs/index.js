@@ -1,8 +1,8 @@
 import JobBoard from "@/components/JobBoard";
 import { fetchAllJobs } from "@/services/functions/job";
 
-export default function Jobs({ jobs }) {
-  return <JobBoard data={jobs} />;
+export default function Jobs({ jobs, count }) {
+  return <JobBoard data={jobs} count={count} />;
 }
 
 export async function getServerSideProps(context) {
@@ -22,7 +22,8 @@ export async function getServerSideProps(context) {
 
     return {
       props: {
-        jobs: jobsData.data,
+        jobs: jobsData.data.rows,
+        count: jobsData.data.count,
       },
     };
   } catch (error) {
