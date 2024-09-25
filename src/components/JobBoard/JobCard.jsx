@@ -6,8 +6,12 @@ export const JobCard = ({ data }) => {
   const global = useSelector((state) => state.global);
 
   return (
-    <div className={"w-full my-3 bg-white shadow-lg rounded-md px-8 py-4"}>
-      <div className="flex gap-4">
+    <div
+      className={
+        "w-full my-3 bg-white shadow-lg rounded-md px-4 md:px-8 py-2 md:py-4"
+      }
+    >
+      <div className="flex gap-4 justify-between">
         <div className="w-fit h-fit">
           <img
             src={data.imageUrl}
@@ -15,7 +19,7 @@ export const JobCard = ({ data }) => {
             className="w-20 h-20 rounded-full"
           />
         </div>
-        <div className="flex-1">
+        <div className="hidden md:flex md:flex-col flex-1">
           <div className="font-bold text-lg text-text">{data.jobTitle}</div>
           <div className="font-normal text-gray-500 text-md">
             {data.companyName}
@@ -39,6 +43,15 @@ export const JobCard = ({ data }) => {
             {moment(data.datePosted).fromNow()}
           </div>
         </div>
+      </div>
+      <div className="py-2 md:hidden">
+        <div className="font-bold text-lg text-text">{data.jobTitle}</div>
+        <div className="font-normal text-gray-500 text-md">
+          {data.companyName}
+        </div>
+        {global?.isAdmin && (
+          <div className="text-xs font-bold">{data.source}</div>
+        )}
       </div>
       <div className="flex flex-wrap gap-1 pt-4 justify-end">
         {data?.location?.map((item, i) => (

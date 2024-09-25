@@ -40,7 +40,7 @@ export default function JobBoard({ data, count }) {
   };
 
   return (
-    <div className="w-full p-6">
+    <div className="w-full p-2 md:p-6">
       <Search
         handleSearch={handleSearch}
         resetSearch={resetSearch}
