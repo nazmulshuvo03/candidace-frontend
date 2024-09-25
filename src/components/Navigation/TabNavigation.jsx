@@ -41,6 +41,17 @@ export const COMMON_AUTHENTICATED_ROUTES = [
   },
 ];
 
+export const OTHER_AUTHENTICATED_ROUTES = [
+  {
+    to: "/message",
+    name: "Message",
+  },
+  {
+    to: "/notification",
+    name: "Notififcation",
+  },
+];
+
 export const AUTHOR_ROUTES = [
   {
     to: "/author",
@@ -65,8 +76,8 @@ export const TabNavigation = () => {
   const navLinks = global.isAdmin
     ? [...COMMON_AUTHENTICATED_ROUTES, ...ADMIN_ROUTES]
     : global.isAuthor
-    ? [...COMMON_AUTHENTICATED_ROUTES, ...AUTHOR_ROUTES]
-    : COMMON_AUTHENTICATED_ROUTES;
+      ? [...COMMON_AUTHENTICATED_ROUTES, ...AUTHOR_ROUTES]
+      : COMMON_AUTHENTICATED_ROUTES;
 
   const isRouteActive = (routePath) => {
     const currentPath = router.asPath.split("?")[0];

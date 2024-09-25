@@ -2,6 +2,7 @@ import {
   ADMIN_ROUTES,
   AUTHOR_ROUTES,
   COMMON_AUTHENTICATED_ROUTES,
+  OTHER_AUTHENTICATED_ROUTES,
 } from "@/components/Navigation/TabNavigation";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -25,14 +26,15 @@ const withAuth = (WrappedComponent) => {
 
     useEffect(() => {
       if (firstSlug) {
-        const slugInCommonRoutes = COMMON_AUTHENTICATED_ROUTES.some(
-          (route) => route.to === `/${firstSlug}`
-        );
+        const slugInCommonRoutes = [
+          ...COMMON_AUTHENTICATED_ROUTES,
+          ...OTHER_AUTHENTICATED_ROUTES,
+        ].some((route) => route.to === `/${firstSlug}`);
         const slugInAdminRoutes = ADMIN_ROUTES.some(
-          (route) => route.to === `/${firstSlug}`
+          (route) => route.to === `/${firstSlug}`,
         );
         const slugInAuthorRoutes = AUTHOR_ROUTES.some(
-          (route) => route.to === `/${firstSlug}`
+          (route) => route.to === `/${firstSlug}`,
         );
         if (global.isAuthor && !(slugInAuthorRoutes || slugInCommonRoutes)) {
           router.push({
