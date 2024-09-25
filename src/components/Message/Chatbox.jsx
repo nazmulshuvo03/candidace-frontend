@@ -70,11 +70,13 @@ export const Chatbox = () => {
         </IconButton>
       </div>
       <div className="messages flex-1 overflow-y-auto p-4">
-        {chatboxMessages &&
-          chatboxMessages.length &&
+        {chatboxMessages && chatboxMessages.length ? (
           chatboxMessages.map((msg, index) => (
             <Chat key={index} message={msg} />
-          ))}
+          ))
+        ) : (
+          <div />
+        )}
         <div ref={messagesEndRef} />
       </div>
       <div className="input-box flex p-4 border-t border-gray-200">
