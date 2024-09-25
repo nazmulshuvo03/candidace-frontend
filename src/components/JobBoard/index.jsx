@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { JobCard } from "./JobCard";
+import { Search } from "../Search";
 
 export default function JobBoard({ data }) {
   const [query, setQuery] = useState("");
@@ -15,6 +16,12 @@ export default function JobBoard({ data }) {
     });
   };
 
+  const resetSearch = () => {
+    setQuery("");
+    setPage(1);
+    router.push("/jobs");
+  };
+
   const handlePagination = (newPage) => {
     setPage((prev) => prev + 1);
     router.push({
@@ -27,21 +34,20 @@ export default function JobBoard({ data }) {
 
   return (
     <div className="w-full p-6">
-      <input
-        type="text"
-        placeholder="Search Jobs"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)} // Update query state
+      <Search
+        handleSearch={handleSearch}
+        resetSearch={resetSearch}
+        query={query}
+        setQuery={setQuery}
+        showResetSearch={query && query.length}
       />
-      <button onClick={handleSearch}>Search</button>
-
-      <button
-        onClick={() => handlePagination(page > 1 ? page - 1 : 1)}
-        disabled={page === 1}
-      >
-        Previous Page
-      </button>
-      <button onClick={() => handlePagination(page + 1)}>Next Page</button>
+      {/* <button */}
+      {/*   onClick={() => handlePagination(page > 1 ? page - 1 : 1)} */}
+      {/*   disabled={page === 1} */}
+      {/* > */}
+      {/*   Previous Page */}
+      {/* </button> */}
+      {/* <button onClick={() => handlePagination(page + 1)}>Next Page</button> */}
 
       {data && data.length ? (
         <div>
