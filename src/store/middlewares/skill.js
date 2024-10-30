@@ -21,7 +21,7 @@ import {
 export const fetchAllSkill = () =>
   asyncWrapper(async (dispatch) => {
     const res = await fetchContent(all_skills_url());
-    console.log("all skills fetched", res);
+    // console.log("all skills fetched", res);
     responseHandler(res, () => dispatch(setAllSkill(res.data)));
   });
 
@@ -78,7 +78,7 @@ export const deleteSkill = (id, profession) =>
 export const fetchAllExperienceType = () =>
   asyncWrapper(async (dispatch) => {
     const res = await fetchContent(all_experience_type_url());
-    console.log("all experience type fetched", res);
+    // console.log("all experience type fetched", res);
     responseHandler(res, () => dispatch(setAllExperienceType(res.data)));
   });
 

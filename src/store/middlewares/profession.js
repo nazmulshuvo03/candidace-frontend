@@ -17,7 +17,7 @@ export const fetchProfessions = () =>
   asyncWrapper(async (dispatch) => {
     dispatch(setLoading());
     const res = await fetchContent(all_professions_url());
-    console.log("Profession docs: ", res);
+    // console.log("Profession docs: ", res);
     responseHandler(res, () => {
       dispatch(setProfessions(res.data));
     });

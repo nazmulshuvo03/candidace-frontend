@@ -19,7 +19,7 @@ import {
 export const fetchExperienceLevels = () =>
   asyncWrapper(async (dispatch) => {
     const res = await fetchContent(all_experience_levels_url());
-    console.log("Experience levels respnse: ", res);
+    // console.log("Experience levels respnse: ", res);
     responseHandler(res, () => {
       dispatch(setExperienceLevels(res.data));
     });
@@ -28,14 +28,14 @@ export const fetchExperienceLevels = () =>
 export const fetchPreparationStages = () =>
   asyncWrapper(async (dispatch) => {
     const res = await fetchContent(all_preparation_stages_url());
-    console.log("Preparation stages respnse: ", res);
+    // console.log("Preparation stages respnse: ", res);
     responseHandler(res, dispatch(setPreparationStages(res.data)));
   });
 
 export const fetchCompanies = () =>
   asyncWrapper(async (dispatch) => {
     const res = await fetchContent(all_companies_url());
-    console.log("Companies respnse: ", res);
+    // console.log("Companies respnse: ", res);
     responseHandler(res, dispatch(setCompanies(res.data)));
   });
 
