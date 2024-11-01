@@ -1,16 +1,28 @@
-//src/sanity-queries/blog-post.js\
 import { client } from "@/lib/sanity";
 
 export async function getAllBlogPosts() {
     try {
-        const query = `*[_type == "post"] | order(orderRank){
+        const query = `*[
+            _type == "post" && 
+            defined(status) &&  
+            status == "published" && 
+            defined(publishedAt) &&  
+            publishedAt <= now() &&
+            !(_id in path('drafts.**'))
+        ] | order(orderRank) {
             _id,
+            _type,
             title,
+            status, 
             smallDescription,
             mainImage,
             'slug': slug.current,
             publishedAt,
-            "category": categories[]->{
+            seoTitle,
+            seoDescription,
+            tags,
+            "category": category->{
+                _id,
                 title,
                 'slug': slug.current
             },
@@ -20,19 +32,29 @@ export async function getAllBlogPosts() {
                 username,
                 'slug': slug.current,
                 avatar
-            }
+            },
         }`
 
         const data = await client.fetch(query);
 
-        if (!data) {
-            throw new Error("No data found");
+        if (!data || data.length === 0) {
+            console.warn("No published posts found");
+            return [];
         }
 
-        return data;
+        // Process posts to ensure uniqueness
+        const uniquePosts = Array.from(
+            new Map(data.map(post => [post._id, post])).values()
+        );
+
+        return uniquePosts;
     } catch (error) {
-        console.log(error);
-        throw new Error("Failed to fetch about us data");
+        console.error("Error details:", {
+            message: error.message,
+            name: error.name,
+            stack: error.stack
+        });
+        throw error;
     }
 }
 
@@ -45,7 +67,8 @@ export async function getBlogDetails(slug) {
             smallDescription,
             mainImage,
             'slug': slug.current,
-            "categories": categories[]->{
+            "category": category->{
+                _id,
                 title,
                 'slug': slug.current
             },
@@ -59,6 +82,8 @@ export async function getBlogDetails(slug) {
             updatedAt,
             content,
             estimatedReadingTime,
+            seoTitle,
+            seoDescription,
             faqs,
         }`
 
@@ -71,7 +96,7 @@ export async function getBlogDetails(slug) {
         return data;
     } catch (error) {
         console.log(error);
-        throw new Error("Failed to fetch blog post data"); // Updated error message to be more specific
+        throw new Error("Failed to fetch blog post data"); 
     }
 }
 
@@ -83,7 +108,7 @@ export async function getAllCategories() {
             title,
             'slug': slug.current,
             description,
-            'postCount': count(*[_type == "post" && references(^._id)]),
+            'postCount': count(*[_type == "post" && status == "published" && category._ref == ^._id]),
             'parentCategory': parentCategory->{
                 _id,
                 title,
@@ -93,10 +118,10 @@ export async function getAllCategories() {
                 _id,
                 title,
                 'slug': slug.current,
-                'postCount': count(*[_type == "post" && references(^._id)])
+                'postCount': count(*[_type == "post" && status == "published" && category._ref == ^._id])
             }
         }
-        `
+        `;
 
         const data = await client.fetch(query);
         return data;
@@ -108,16 +133,26 @@ export async function getAllCategories() {
 
 export async function getBlogPostsByCategory(categorySlug) {
     try {
-        const query = `*[_type == "post" && references(*[_type=="category" && slug.current == $categorySlug]._id)] | order(orderRank) {
+        const query = `*[_type == "post" && 
+            references(*[_type=="category" && slug.current == $categorySlug]._id) &&
+            defined(status) &&  // Ensure status field exists
+            status == "published" && 
+            defined(publishedAt) &&  // Ensure publishedAt field exists
+            publishedAt <= now() &&
+            !(_id in path('drafts.**'))
+        ] | order(orderRank) {
         _id,
         title,
         smallDescription,
         mainImage,
         'slug': slug.current,
         publishedAt,
-        "category": categories[]->{
-          title,
-          'slug': slug.current
+        seoTitle,
+        seoDescription,
+        "category": category->{
+            _id,
+            title,
+            'slug': slug.current
         },
         "author": author->{
           name,
@@ -176,6 +211,8 @@ export async function getBlogPostsByAuthor(authorSlug) {
 
         const author = await client.fetch(authorQuery, { authorSlug });
 
+        console.log('author: ', author)
+
         if (!author) {
             return { author: null, posts: [] };
         }
@@ -188,7 +225,10 @@ export async function getBlogPostsByAuthor(authorSlug) {
             mainImage,
             'slug': slug.current,
             publishedAt,
-            "category": categories[]->{
+            seoTitle,
+            seoDescription,
+            "category": category->{
+                _id,
                 title,
                 'slug': slug.current
             },
@@ -202,6 +242,8 @@ export async function getBlogPostsByAuthor(authorSlug) {
 
         const posts = await client.fetch(postsQuery, { authorId: author._id });
 
+        console.log('posts: ', posts)
+
         return {
             author,
             posts: posts || []
@@ -211,31 +253,3 @@ export async function getBlogPostsByAuthor(authorSlug) {
         throw error;
     }
 }
-
-// *[_type == "post"][0]{
-//     _id,
-//     title,
-//     slug,
-//     author,
-//     status,
-//     smallDescription,
-//     mainImage,
-//     categories,
-//     publishedAt,
-//     updatedAt,
-//     content,
-//     estimatedReadingTime,
-//   }
-
-// *[_type == "category"] | order(orderRank) {
-//     _id,
-//     title,
-//     "slug": slug.current,
-//     description,
-//     "subcategories": *[_type == "category" && references(^._id)] {
-//       _id,
-//       title,
-//       "slug": slug.current,
-//       description
-//     }
-// }

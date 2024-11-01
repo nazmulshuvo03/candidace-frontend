@@ -1,61 +1,72 @@
-import { useState } from "react";
-import styles from "./style.module.css";
+import React, { useRef, useState } from 'react';
+// import { Icon } from '@iconify/react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
-import { IconButton } from "@/components/Button/IconButton";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
+const FaqItem = ({ question, answer, isOpen, onClick }) => {
+    const contentHeight = useRef(null);
+
+    return (
+        <div className="border-b border-gray-200 overflow-hidden">
+            <button
+                className={`
+                    w-full text-left py-4 px-2 flex items-center gap-2 
+                    font-semibold rounded-sm
+                    ${isOpen ? 'text-secondary bg-[#00678c18] hover:hover:bg-[#00678c3a]' : ''}
+                    hover:bg-[#00678c18] transition-all
+                `}
+                onClick={onClick}
+            >
+                <FontAwesomeIcon
+                    icon={faPlus}
+                    className={`
+                        size-4 md:size-5 transition-transform duration-500 
+                        ${isOpen ? 'rotate-45' : ''}
+                    `}
+                />
+                <p>{question}</p>
+            </button>
+
+            <div
+                ref={contentHeight}
+                className="transition-[height] duration-500 ease-in-out overflow-hidden"
+                style={
+                    isOpen && contentHeight.current
+                        ? { height: `${contentHeight.current.scrollHeight}px` }
+                        : { height: "0px" }
+                }
+            >
+                <p className="px-4 pl-8 pb-4 pt-2 text-gray-700">
+                    {answer}
+                </p>
+            </div>
+        </div>
+    );
+};
 
 const BlogDetailFAQs = ({ faqs }) => {
-    const [openFAQs, setOpenFAQs] = useState({});
+    const [activeIndex, setActiveIndex] = useState(null);
 
-    const toggleFAQ = (faqKey) => {
-        setOpenFAQs((prevState) => ({
-            ...prevState,
-            [faqKey]: !prevState[faqKey],
-        }));
+    const handleItemClick = (index) => {
+        setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
     };
 
     return (
-        <div
-            className="py-6 md:py-16"
-            style={{ paddingLeft: "5%", paddingRight: "5%" }}
-        >
-            <div className="pb-6">
-                <div className="text-2xl md:text-4xl font-bold pb-4">FAQs</div>
-                <div className="text-xs md:text-base font-medium">
-                    Find answers to common questions about the service, interview
-                    preparation, and technical requirements.
-                </div>
-            </div>
-            <div className="py-6">
-                {faqs.map((faq) => (
-                    <div
-                        key={faq._key}
-                        className={`border-b border-text py-2 md:py-4 ${faq._key === 1 ? "border-t" : ""
-                            }`}
-                    >
-                        <div
-                            className={`flex items-center justify-between`}
-                            onClick={() => toggleFAQ(faq._key)}
-                        >
-                            <div className="text-sm md:text-base font-medium">
-                                {faq.question}
-                            </div>
-                            <IconButton>
-                                <FontAwesomeIcon
-                                    icon={openFAQs[faq._key] ? faAngleUp : faAngleDown}
-                                    className="w-3 h-3 md:w-4 md:h-4 text-text"
-                                />
-                            </IconButton>
-                        </div>
-                        <div
-                            className={`py-4 pl-4 text-xs md:text-sm font-light ${openFAQs[faq._key]
-                                    ? `${styles.animateSlideDown}`
-                                    : `${styles.animateSlideUp}`
-                                }`}
-                        >
-                            {faq.answer}
-                        </div>
-                    </div>
+        <div className="max-w-800 w-90 mx-auto my-12 px-4 md:px-0">
+            <h2 className="text-left text-2xl md:text-3xl font-bold mb-8">
+                Do you have questions about the{" "}
+                <br className="hidden md:block" />
+                process?
+            </h2>
+            <div>
+                {faqs.map((faq, index) => (
+                    <FaqItem
+                        key={index}
+                        question={faq.question}
+                        answer={faq.answer}
+                        isOpen={activeIndex === index}
+                        onClick={() => handleItemClick(index)}
+                    />
                 ))}
             </div>
         </div>

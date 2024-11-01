@@ -1,7 +1,5 @@
-//src/components/Blog/CategoryList.jsx
 import React from 'react';
 import Link from 'next/link';
-// import { ChevronRight, ChevronDown } from 'lucide-react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronDown,
@@ -52,8 +50,8 @@ const CategoryList = ({ categories, currentCategorySlug }) => {
     return (
       <div className="w-full">
         <div
-          // className={`flex items-center justify-between py-2 px-${level * 4} hover:bg-gray-50 cursor-pointer`}
           className={`flex items-center justify-between py-2 px-${level * 4} hover:bg-gray-50 cursor-pointer rounded-md px-2 transition-all
+            ${hasSubcategories ? 'pl-1' : 'pl-4'}
             ${isActive ? 'bg-[#00678c18] hover:bg-[#00678c3a]' : ''}`}
         >
           <div className="flex items-center gap-2">
@@ -115,31 +113,3 @@ const CategoryList = ({ categories, currentCategorySlug }) => {
 };
 
 export default CategoryList;
-
-// import Link from "next/link";
-
-// export default function CategoryList({ categories }) {
-//   return (
-//     <div className="px-4 py-8">
-//       <h2 className="text-2xl font-bold mb-6">{`Categories (${categories?.meta?.total})`}</h2>
-//       <ul className="flex flex-wrap gap-2">
-//         {categories &&
-//           categories.data &&
-//           categories.data.length > 0 &&
-//           categories.data.map((category) => (
-//             <li
-//               key={category.id}
-//               className="border-2 px-4 py-1 rounded border-secondary hover:bg-secondary"
-//             >
-//               <Link
-//                 href={`/blog/category/${category.slug}`}
-//                 className="text-secondary hover:text-slate-50 cursor-pointer"
-//               >
-//                 {category.name}
-//               </Link>
-//             </li>
-//           ))}
-//       </ul>
-//     </div>
-//   );
-// }

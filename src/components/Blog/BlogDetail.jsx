@@ -75,13 +75,6 @@ export default function BlogDetail({ blog }) {
     return () => observer.disconnect();
   }, [blog.content]);
 
-  // const handleTocClick = (slug) => {
-  //   const element = document.getElementById(slug);
-  //   if (element) {
-  //     element.scrollIntoView({ behavior: 'smooth' });
-  //   }
-  // };
-
   const faqs = useRef(null);
 
   const handleTocClick = (slug) => {
@@ -129,7 +122,7 @@ export default function BlogDetail({ blog }) {
                   {toc.map((heading, index) => (
                     <li
                       key={index}
-                      style={{ paddingLeft: `${(heading.level - 1) * 1}rem` }}
+                      style={{ paddingLeft: `${(heading.level - 1) * 0.5}rem` }}
                     >
                       <a
                         href={`#${heading.slug}`}
@@ -146,7 +139,7 @@ export default function BlogDetail({ blog }) {
                       </a>
                     </li>
                   ))}
-                  <li>
+                  <li className="pl-2">
                     <a
                       href="#faqs"
                       onClick={(e) => {
@@ -214,32 +207,3 @@ const MetadataItem = ({ label, value }) => {
     </div>
   );
 };
-
-
-// import { urlFor } from "@/lib/sanity";
-// import Image from "next/image";
-// import { PortableText } from '@portabletext/react';
-// import { portableTextComponents } from "./portable-text-components";
-
-// export default function BlogDetail({ blog }) {
-//   return (
-//     <div className="px-4 py-8">
-//       <h1 className="text-4xl font-bold mb-4">{blog.title}</h1>
-//       <div>
-//         <Image
-//           src={urlFor(blog.mainImage).url()}
-//           alt='project'
-//           width={400}
-//           height={400}
-//           quality={100}
-//           priority={true}
-//           className='w-full h-auto max-h-96 object-cover rounded-2xl'
-//         />
-//       </div>
-//       <PortableText
-//         value={blog.content}
-//         components={portableTextComponents}
-//       />
-//     </div>
-//   );
-// }

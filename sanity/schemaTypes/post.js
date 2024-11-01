@@ -1,5 +1,6 @@
 import { defineField, defineType } from 'sanity'
 import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list';
+import { SEODescriptionInput, SEOTitleInput } from '../components/SEOInputs';
 
 export default defineType({
     name: 'post',
@@ -45,10 +46,19 @@ export default defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
+            name: 'smallDescription',
+            title: 'Small Description',
+            type: 'text',
+            validation: (Rule) => Rule.required().max(200),
+        }),
+        defineField({
             name: 'seoTitle',
             title: 'SEO Title',
             type: 'string',
             description: 'Title tag for search engines (max 60 characters)',
+            components: {
+                input: SEOTitleInput
+            },
             validation: (Rule) => Rule.max(60),
         }),
         defineField({
@@ -56,13 +66,10 @@ export default defineType({
             title: 'SEO Description',
             type: 'text',
             description: 'Meta description for search engines (max 160 characters)',
+            components: {
+                input: SEODescriptionInput
+            },
             validation: (Rule) => Rule.max(160),
-        }),
-        defineField({
-            name: 'smallDescription',
-            title: 'Small Description',
-            type: 'text',
-            validation: (Rule) => Rule.required().max(200),
         }),
         defineField({
             name: 'mainImage',
@@ -82,11 +89,11 @@ export default defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
-            name: 'categories',
-            title: 'Categories',
-            type: 'array',
-            of: [{ type: 'reference', to: { type: 'category' } }],
-            validation: (Rule) => Rule.required().min(1),
+            name: 'category',
+            title: 'Category',
+            type: 'reference',
+            to: { type: 'category' },
+            validation: (Rule) => Rule.required(),
         }),
         defineField({
             name: 'tags',
