@@ -10,7 +10,7 @@ import {
 
 export const fetchAllBlogs = async () => {
   const res = await fetchContent(all_blog_url());
-  console.log("all blogs response: ", res);
+  // console.log("all blogs response: ", res);
   if (res.success) {
     return res;
   } else return null;
@@ -18,7 +18,7 @@ export const fetchAllBlogs = async () => {
 
 export const fetchSingleBlog = async (slug) => {
   const res = await fetchContent(single_blog_url(slug));
-  console.log("single blogs response: ", res);
+  // console.log("single blogs response: ", res);
   if (res.success) {
     return res;
   } else return null;
@@ -42,7 +42,7 @@ export const updateBlog = async (blogId, blogData) => {
 
 export const fetchAllCategories = async () => {
   const res = await fetchContent(all_category_url());
-  console.log("all categories response: ", res);
+  // console.log("all categories response: ", res);
   if (res.success) {
     return res;
   } else return null;

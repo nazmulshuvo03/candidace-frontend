@@ -1,81 +1,193 @@
-import BlogCard from "@/components/Blog/BlogCard";
-import { fetchBlogsOfCategory } from "@/services/functions/blog";
-import moment from "moment";
-import Link from "next/link";
+import BlogHeader from "@/components/Blog/BlogHeader";
+import BlogLayout from "@/components/Blog/BlogLayout";
+import BlogList from "@/components/Blog/BlogList"
+import Breadcrumb from "@/components/Blog/Breadcrumb";
+import CategoryList from "@/components/Blog/CategoryList"
+import { urlFor } from "@/lib/sanity";
+import { getBlogPostsByCategory, getAllCategories, getCategoryBySlug } from "@/sanity-queries/blog-post"
+import Head from "next/head";
 
-export default function CategoryBlogsPage({ category, blogs }) {
-  if (!category) {
-    return (
-      <div className="px-4 py-8">
-        <h1 className="text-3xl font-bold">Category Not Found</h1>
-        <p>The category you are looking for does not exist.</p>
-      </div>
-    );
-  }
+export default function CategoryPage({ blogPosts, categories, currentCategory, metadata }) {
+  const items = [
+    { label: 'Home', url: '/' },
+    { label: 'Blog', url: '/blog' },
+    { label: currentCategory.title, url: `/blog/category/${currentCategory.slug}` },
+  ];
 
   return (
-    <div className="px-4 py-8">
-      <div className="mb-6">
-        <div className="text-3xl font-bold pt-2 pb-2">
-          <span className="text-gray-500">Blogs in</span>{" "}
-          <span className="text-secondary">{category.name}</span>
-        </div>
-        <div className="flex gap-4 items-center">
-          <Link
-            href={`/blog/author/${category?.creator?.id}`}
-            className="flex gap-2 items-center py-1"
-          >
-            <img
-              src={category?.creator?.photoURL}
-              alt={category?.creator?.userName}
-              className="h-6 w-6 rounded-full"
+    <>
+      <Head>
+        {/* Basic Meta Tags */}
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+        <meta name="keywords" content={metadata.keywords} />
+
+        {/* Open Graph Tags */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={metadata.title} />
+        <meta property="og:description" content={metadata.description} />
+        <meta property="og:url" content={metadata.url} />
+        {metadata.ogImage && <meta property="og:image" content={metadata.ogImage} />}
+        {metadata.ogImage && <meta property="og:image:width" content="1200" />}
+        {metadata.ogImage && <meta property="og:image:height" content="630" />}
+
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={metadata.title} />
+        <meta name="twitter:description" content={metadata.description} />
+        {metadata.ogImage && <meta name="twitter:image" content={metadata.ogImage} />}
+
+        {/* Canonical URL */}
+        <link rel="canonical" href={metadata.url} />
+
+        {/* Schema.org Markup */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(metadata.schema)
+          }}
+        />
+      </Head>
+      <BlogLayout>
+        <div className="px-4 w-full">
+          <div className="w-full max-w-[90rem] mx-auto mt-8">
+            <Breadcrumb items={items} />
+            <BlogHeader
+              title={currentCategory.title}
+              description={currentCategory.description || `Explore our ${currentCategory.title} articles and insights`}
             />
-            <div className="text-md font-semibold">
-              @{category?.creator?.userName}
+            <div className="w-full grid grid-cols-1 lg:grid-cols-4 sm:gap-7">
+              <div className="lg:col-span-3 order-2 lg:order-1">
+                <BlogList blogs={blogPosts} />
+              </div>
+              <div className="lg:col-span-1 pt-5 lg:py-8 order-1 lg:order-2">
+                <CategoryList categories={categories} currentCategorySlug={currentCategory.slug} />
+              </div>
             </div>
-          </Link>
-          <div className="text-md text-gray-500">
-            {moment(category.createdAt).format("MMM DD, YYYY")}
           </div>
         </div>
-      </div>
-      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-        {blogs.length > 0 ? (
-          blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)
-        ) : (
-          <p>No blogs found in this category.</p>
-        )}
-      </ul>
-    </div>
+      </BlogLayout>
+    </>
   );
 }
 
-export async function getServerSideProps(context) {
-  const { slug } = context.params;
-
+export async function getServerSideProps({ params, req }) {
   try {
-    const data = await fetchBlogsOfCategory(slug);
+    const [blogPosts, categories, currentCategory] = await Promise.all([
+      getBlogPostsByCategory(params.slug),
+      getAllCategories(),
+      getCategoryBySlug(params.slug)
+    ]);
 
-    if (!data.success || !data.data) {
-      return {
-        notFound: true,
-      };
+    console.log('currentCategory: ', currentCategory)
+    console.log('getBlogPostsByCategory: ', getBlogPostsByCategory)
+
+    if (!currentCategory) {
+      return { notFound: true };
     }
 
+    // Construct the base URL
+    // const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+    const protocol = 'https';
+    const baseUrl = `${protocol}://${req.headers.host}`;
+    const currentUrl = `${baseUrl}/blog/category/${params.slug}`;
+
+    // Get post count and latest post
+    const postCount = blogPosts.length;
+    const latestPost = blogPosts[0];
+    const oldestPost = blogPosts[blogPosts.length - 1];
+
+    // Generate category-specific keywords
+    const keywords = [
+      currentCategory.title,
+      ...blogPosts.slice(0, 5).flatMap(post => post.tags || []),
+      'blog',
+      'articles'
+    ].filter(Boolean);
+
+    // Prepare metadata
+    const metadata = {
+      title: generateTitle(currentCategory, postCount),
+      description: generateDescription(currentCategory, latestPost, postCount),
+      keywords: keywords.join(', '),
+      url: currentUrl,
+      ogImage: selectOgImage(latestPost, baseUrl),
+      type: 'website',
+      schema: generateSchemaMarkup({
+        category: currentCategory,
+        posts: blogPosts,
+        baseUrl,
+        currentUrl,
+        latestPost,
+        oldestPost
+      })
+    };
+
     return {
       props: {
-        all: await fetchBlogsOfCategory(slug),
-        category: data.data.category || null,
-        blogs: data.data.blogs || [],
-      },
+        blogPosts,
+        categories,
+        currentCategory,
+        metadata
+      }
     };
   } catch (error) {
-    console.error("Error fetching blogs by category:", error);
-    return {
-      props: {
-        category: null,
-        blogs: [],
-      },
-    };
+    console.error('Error loading category page:', error);
+    return { notFound: true };
   }
+}
+
+// Helper functions for metadata generation
+function generateTitle(category, postCount) {
+  if (category.seoTitle) return category.seoTitle;
+
+  return `${category.title} Articles (${postCount}) | Candidace`;
+}
+
+function generateDescription(category, latestPost, postCount) {
+  if (category.seoDescription) return category.seoDescription;
+
+  const baseDescription = category.description ||
+    `Explore our collection of ${category.title} articles and insights`;
+
+  return `${baseDescription}. Features ${postCount} articles${latestPost ? `, including "${latestPost.title}"` : ''
+    }.`;
+}
+
+function selectOgImage(latestPost, baseUrl) {
+  return latestPost?.mainImage ?
+    urlFor(latestPost.mainImage).width(1200).height(630).url() :
+    `${baseUrl}/default-og-image.jpg`;
+}
+
+function generateSchemaMarkup({ category, posts, baseUrl, currentUrl, latestPost, oldestPost }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "headline": category.title,
+    "description": category.description,
+    "url": currentUrl,
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Candidace",
+      "url": baseUrl
+    },
+    "datePublished": oldestPost?.publishedAt || null,
+    "dateModified": latestPost?.publishedAt || null,
+    "about": {
+      "@type": "Thing",
+      "name": category.title,
+      "description": category.description
+    },
+    "hasPart": posts.map(post => ({
+      "@type": "BlogPosting",
+      "headline": post.title,
+      "url": `${baseUrl}/blog/${post.slug}`,
+      "datePublished": post.publishedAt || null,
+      "author": {
+        "@type": "Person",
+        "name": post.author?.name || null
+      }
+    }))
+  };
 }
