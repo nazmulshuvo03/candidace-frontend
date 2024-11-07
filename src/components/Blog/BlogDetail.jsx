@@ -189,7 +189,7 @@ const BlogMetadata = ({ blog }) => {
       />
       <MetadataItem
         label="Last Updated"
-        value={<span>{dateFormat(blog.updatedAt)}</span>}
+        value={<span>{dateFormat(blog._updatedAt)}</span>}
       />
       <MetadataItem
         label="Estimated Reading Time"

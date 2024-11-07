@@ -111,12 +111,6 @@ export default defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
-            name: 'updatedAt',
-            title: 'Last Updated at',
-            type: 'datetime',
-            validation: (Rule) => Rule.required(),
-        }),
-        defineField({
             name: 'content',
             type: 'array',
             title: 'Content',
