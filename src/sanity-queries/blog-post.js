@@ -79,7 +79,7 @@ export async function getBlogDetails(slug) {
                 avatar
             },
             publishedAt,
-            updatedAt,
+            _updatedAt,
             content,
             estimatedReadingTime,
             seoTitle,
