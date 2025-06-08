@@ -2,6 +2,8 @@ import { Footer } from "../components/Footer";
 import { Button } from "../components/Button";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { FAQ } from "../components/FAQ";
+import { NumberCounter } from "../components/NumberCounter";
 
 const Landing = () => {
   const router = useRouter();
@@ -19,6 +21,34 @@ const Landing = () => {
       query: { ...router.query, auth: "signup" },
     });
   };
+
+  const faqs = [
+    {
+      question: "Is Candidace free to use?",
+      answer:
+        "Yes, Candidace offers a free tier that lets you conduct practice interviews and receive feedback. Premium features are available for enhanced experience.",
+    },
+    {
+      question: "How does the matching system work?",
+      answer:
+        "We match you with peers based on your industry, role, experience level, and availability to ensure the most relevant practice experience.",
+    },
+    {
+      question: "What kind of feedback will I receive?",
+      answer:
+        "You'll get structured feedback on your interview performance, including communication skills, technical knowledge, and areas for improvement.",
+    },
+    {
+      question: "How many practice interviews can I do?",
+      answer:
+        "Free tier users can conduct up to 3 practice interviews per month. Premium users get unlimited practice sessions with advanced features.",
+    },
+    {
+      question: "Can I choose my interview partner?",
+      answer:
+        "Yes, you can browse through available partners and send interview requests to those who match your preferences and schedule.",
+    },
+  ];
 
   return (
     <div className="min-h-screen w-screen flex flex-col">
@@ -188,6 +218,137 @@ const Landing = () => {
               <p className="text-gray-600">Conduct mock interviews</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Statistics Section */}
+      <section className="py-16 px-4 md:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <NumberCounter end={5000} suffix="+" />
+              <p className="text-gray-600">Practice Interviews Conducted</p>
+            </div>
+            <div className="text-center">
+              <NumberCounter end={85} suffix="%" />
+              <p className="text-gray-600">Success Rate in Real Interviews</p>
+            </div>
+            <div className="text-center">
+              <NumberCounter end={3000} suffix="+" />
+              <p className="text-gray-600">Active Users</p>
+            </div>
+            <div className="text-center">
+              <NumberCounter end={20} suffix="+" />
+              <p className="text-gray-600">Industry Domains</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-20 px-4 md:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+            Why Choose Candidace?
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+              <div className="text-secondary text-2xl mb-4">🎯</div>
+              <h3 className="text-xl font-semibold mb-3">Targeted Practice</h3>
+              <p className="text-gray-600">
+                Match with peers in your specific industry and role for the most
+                relevant practice experience
+              </p>
+            </div>
+            <div className="p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+              <div className="text-secondary text-2xl mb-4">💡</div>
+              <h3 className="text-xl font-semibold mb-3">Expert Insights</h3>
+              <p className="text-gray-600">
+                Get valuable feedback from peers who understand your industry's
+                specific requirements
+              </p>
+            </div>
+            <div className="p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+              <div className="text-secondary text-2xl mb-4">📈</div>
+              <h3 className="text-xl font-semibold mb-3">Track Progress</h3>
+              <p className="text-gray-600">
+                Monitor your improvement with detailed feedback and performance
+                analytics
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 px-4 md:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+            What Our Users Say
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center text-white font-bold">
+                  JS
+                </div>
+                <div className="ml-4">
+                  <h4 className="font-semibold">John Smith</h4>
+                  <p className="text-gray-600 text-sm">
+                    Software Engineer at Google
+                  </p>
+                </div>
+              </div>
+              <p className="text-gray-600">
+                "Candidace helped me prepare thoroughly for my technical
+                interviews. The peer feedback was invaluable!"
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center text-white font-bold">
+                  AS
+                </div>
+                <div className="ml-4">
+                  <h4 className="font-semibold">Alice Stevens</h4>
+                  <p className="text-gray-600 text-sm">
+                    Product Manager at Microsoft
+                  </p>
+                </div>
+              </div>
+              <p className="text-gray-600">
+                "The structured practice interviews and detailed feedback helped
+                me land my dream job!"
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center text-white font-bold">
+                  RK
+                </div>
+                <div className="ml-4">
+                  <h4 className="font-semibold">Ryan Kumar</h4>
+                  <p className="text-gray-600 text-sm">
+                    Data Scientist at Amazon
+                  </p>
+                </div>
+              </div>
+              <p className="text-gray-600">
+                "The platform's matching system helped me find perfect practice
+                partners in my field."
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 px-4 md:px-8 bg-white">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+            Frequently Asked Questions
+          </h2>
+          <FAQ faqs={faqs} />
         </div>
       </section>
 
